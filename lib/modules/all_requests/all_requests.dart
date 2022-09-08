@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 
 import '../../shared/components/components.dart';
@@ -49,8 +50,10 @@ class AllRequestsScreen extends StatelessWidget {
                       documentId: cubit.docIDs[index],
                       documentDataKey: 'consultation',
                     ),
-                    /*archivedRequestsData: archivedRequests[index],
-                      doneRequestsData: doneRequests[index],*/
+                    */
+/*archivedRequestsData: archivedRequests[index],
+                      doneRequestsData: doneRequests[index],*//*
+
                   ),
               );
               //print(cubit.docIDs[index]);
@@ -84,3 +87,4 @@ class AllRequestsScreen extends StatelessWidget {
     );
   }
 }
+*/

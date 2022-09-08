@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:technical_requests/modules/done_requests/done_requests.dart';
+import 'package:technical_requests/modules/settings_screen/settings_screen.dart';
 
 import '../modules/all_requests/get_requests_data.dart';
 import '../modules/login/login_screen.dart';
@@ -25,7 +26,7 @@ class HomeLayout extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(cubit.appBarTitle[cubit.currentIndex]),
+        title: const Text('Requests'),
       ),
 
       // **************************  The Drawer  ***************************
@@ -108,7 +109,7 @@ class HomeLayout extends StatelessWidget {
 
             InkWell(
               onTap: () {
-                navigateAndFinish(context, const HomeLayout());
+                navigateAndFinish(context, const SettingsScreen());
               },
               child: const ListTile(
                 title: Text(

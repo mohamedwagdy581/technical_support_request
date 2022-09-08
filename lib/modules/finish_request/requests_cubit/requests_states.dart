@@ -24,6 +24,8 @@ class CreateRequestErrorState extends RequestStates
 
 class PickImageSuccessState extends RequestStates{}
 
+class RequestChangeLocationState extends RequestStates {}
+
 // Change Mode Theme of App
 class AppChangeModeThemeState extends RequestStates {}
 

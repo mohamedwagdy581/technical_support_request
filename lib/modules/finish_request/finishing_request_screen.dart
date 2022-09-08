@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:technical_requests/home_layout/home_layout.dart';
 import 'package:technical_requests/shared/gps_location.dart';
 
 import '../../shared/components/components.dart';
@@ -91,7 +92,9 @@ class FinishingRequestScreen extends StatelessWidget {
                         children: [
                           defaultOutlineAddButton(
                             onPressed: () async {
+
                               RequestCubit.get(context).pickImage(1);
+
                               // Get Reference To Storage Root
                               Reference referenceRoot = FirebaseStorage.instance.ref();
                               Reference referenceDirImages = referenceRoot.child('images');
@@ -163,7 +166,6 @@ class FinishingRequestScreen extends StatelessWidget {
                           defaultOutlineAddButton(
                             onPressed: () async {
                               RequestCubit.get(context).pickImage(3);
-                              //_selectImage(3);
                               // Get Reference To Storage Root
                               Reference referenceRoot = FirebaseStorage.instance.ref();
                               Reference referenceDirImages = referenceRoot.child('images');
@@ -204,27 +206,30 @@ class FinishingRequestScreen extends StatelessWidget {
                       customRequestDetailsRow(
                         title: 'Location : ',
                         //requestTitle: requestCompanyMachine,
-                        trailingWidget: IconButton(
-                          onPressed: () {
-                            _showModelBottomSheet(
-                              context: context,
-                              onTapped: ()
-                              {
-                                var position = determinePosition();
-                                position.then((value) {
-                                  if (kDebugMode) {
-                                    print('location = lt : ${value.latitude.toString()}   LG: ${value.longitude.toString()}');
-                                  }
-                                  _latitude = value.latitude;
-                                  _longitude = value.longitude;
-                                });
-                                Navigator.pop(context);
-                              }
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.location_on_outlined,
-                            color: Colors.blue,
+                        trailingWidget: Padding(
+                          padding: const EdgeInsets.only(right: 25.0),
+                          child: IconButton(
+                            onPressed: () {
+                              _showModelBottomSheet(
+                                context: context,
+                                onTapped: ()
+                                {
+                                  var position = determinePosition();
+                                  position.then((value) {
+                                    if (kDebugMode) {
+                                      print('location = lt : ${value.latitude.toString()}   LG: ${value.longitude.toString()}');
+                                    }
+                                    _latitude = value.latitude;
+                                    _longitude = value.longitude;
+                                  });
+                                  Navigator.pop(context);
+                                }
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.location_on_outlined,
+                              color: Colors.blue,
+                            ),
                           ),
                         ),
                       ),
@@ -301,23 +306,48 @@ class FinishingRequestScreen extends StatelessWidget {
 
                             }else
                             {
-                              RequestCubit.get(context).technicalRequest(
-                                city: city.toString(),
-                                companyName: companyName.toString(),
-                                school: school.toString(),
-                                machineImage: machineImageUrl,
-                                machineTypeImage: machineTypeImageUrl,
-                                damageImage: damageImageUrl,
-                                consultation: consultation.toString(),
-                                longitude: _longitude,
-                                latitude: _latitude,
-                              );
+                              _showDoneAndArchivedDialog(context: context, doneOnPressed: ()
+                              {
+                                RequestCubit.get(context).technicalDoneRequest(
+                                  city: city.toString(),
+                                  companyName: companyName.toString(),
+                                  school: school.toString(),
+                                  machineImage: machineImageUrl,
+                                  machineTypeImage: machineTypeImageUrl,
+                                  damageImage: damageImageUrl,
+                                  consultation: consultation.toString(),
+                                  longitude: _longitude,
+                                  latitude: _latitude,
+                                );
 
-                              showToast(
-                                message:
-                                'Request To Maintenance Sent Successfully',
-                                state: ToastStates.SUCCESS,
-                              );
+                                showToast(
+                                  message:
+                                  'Request To Maintenance Sent Successfully',
+                                  state: ToastStates.SUCCESS,
+                                );
+                                navigateAndFinish(context, const HomeLayout());
+                              },
+                                  archivedOnPressed: ()
+                                  {
+                                    RequestCubit.get(context).technicalArchivedRequest(
+                                      city: city.toString(),
+                                      companyName: companyName.toString(),
+                                      school: school.toString(),
+                                      machineImage: machineImageUrl,
+                                      machineTypeImage: machineTypeImageUrl,
+                                      damageImage: damageImageUrl,
+                                      consultation: consultation.toString(),
+                                      longitude: _longitude,
+                                      latitude: _latitude,
+                                    );
+
+                                    showToast(
+                                      message:
+                                      'Request still Archived',
+                                      state: ToastStates.WARNING,
+                                    );
+                                    navigateAndFinish(context, const HomeLayout());
+                                  });
                             }
 
                           }
@@ -356,7 +386,7 @@ class FinishingRequestScreen extends StatelessWidget {
           title: Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 20.0),
+                padding: const EdgeInsets.only(left: 5.0),
                 child: Text(
                   title,
                   style: const TextStyle(
@@ -364,9 +394,11 @@ class FinishingRequestScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: requestTitle,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 5.0),
+                  child: requestTitle,
+                ),
               ),
             ],
           ),
@@ -424,5 +456,22 @@ class FinishingRequestScreen extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  Future<bool> _showDoneAndArchivedDialog(
+      {
+    context,
+    required VoidCallback doneOnPressed,
+    required VoidCallback archivedOnPressed,
+  }) async
+  {
+    return await showDialog(context: context, builder: (context) => AlertDialog(
+      title: const Text('Finishing Request'),
+      content: const Text('If Request is Done!, Enter the Done Button, if not Enter the Archive Button.'),
+      actions: [
+        defaultButton(onPressed: doneOnPressed, text: 'Done',backgroundColor: Colors.green,),
+        defaultButton(onPressed: archivedOnPressed, text: 'Archive',backgroundColor: Colors.red,),
+      ],
+    ));
   }
 }

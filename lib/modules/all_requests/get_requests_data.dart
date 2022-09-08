@@ -29,7 +29,7 @@ class GetRequestsData extends StatelessWidget {
             return Text(
                 '${requests[documentDataKey]}',
               style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                fontSize: 20.0,
+                fontSize: 18.0,
                 fontWeight: FontWeight.bold,
                 color: AppCubit.get(context).isDark
                     ? Colors.black

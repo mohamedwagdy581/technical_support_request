@@ -31,7 +31,9 @@ class RequestDetails extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
+      body: ListView.builder(
+        itemCount: 1,
+        itemBuilder: (context, index) => Column(
         children: [
           SizedBox(
             height: height * 0.1,
@@ -39,7 +41,7 @@ class RequestDetails extends StatelessWidget {
           Text(
             'Request From : ',
             style:
-                Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 22.0),
+            Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 22.0),
           ),
           Container(
             margin: const EdgeInsets.all(20),
@@ -123,6 +125,7 @@ class RequestDetails extends StatelessWidget {
             label: 'Start Finish Request',
           ),
         ],
+      ),
       ),
     );
   }

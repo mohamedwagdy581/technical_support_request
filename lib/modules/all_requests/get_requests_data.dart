@@ -17,7 +17,7 @@ class GetRequestsData extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get the Collection
 
-    CollectionReference requests = FirebaseFirestore.instance.collection('requests');
+    final CollectionReference requests = FirebaseFirestore.instance.collection('requests');
 
     return FutureBuilder<DocumentSnapshot>(
       future: requests.doc(documentId).get(),

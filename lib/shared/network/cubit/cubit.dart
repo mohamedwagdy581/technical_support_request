@@ -34,13 +34,13 @@ class AppCubit extends Cubit<AppStates> {
 
   Future getDocId() async
   {
-    //emit(AppGetDocIDsLoadingState());
     await FirebaseFirestore.instance.collection('requests').get().then((snapshot)
     {
       for (var document in snapshot.docs) {
         docIDs.add(document.reference.id);
       }
       emit(AppGetDocIDsSuccessState());
+
     }).catchError((error)
     {
       emit(AppGetDocIDsErrorState(error));

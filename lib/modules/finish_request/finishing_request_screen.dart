@@ -296,7 +296,7 @@ class FinishingRequestScreen extends StatelessWidget {
                               print(machineTypeImageUrl);
                             }
 
-                            if(machineImageUrl.isEmpty && machineTypeImageUrl.isEmpty && _latitude == 0.0 && _longitude == 0.0)
+                            if(machineImageUrl.isEmpty && machineTypeImageUrl.isEmpty && damageImageUrl.isEmpty && _latitude == 0.0 && _longitude == 0.0)
                             {
                               return showToast(
                                 message:
@@ -322,7 +322,7 @@ class FinishingRequestScreen extends StatelessWidget {
 
                                 showToast(
                                   message:
-                                  'Request To Maintenance Sent Successfully',
+                                  'Request Done Successfully',
                                   state: ToastStates.SUCCESS,
                                 );
                                 navigateAndFinish(context, const HomeLayout());

@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:technical_requests/modules/finish_request/finishing_request_screen.dart';
 import 'package:technical_requests/shared/components/components.dart';
 
 
 class RequestDetails extends StatelessWidget {
+  final String id;
+  final int currentIndex;
   final Widget requestCompanyName;
   final Widget requestCompanyCity;
   final Widget requestCompanySchool;
@@ -23,109 +26,134 @@ class RequestDetails extends StatelessWidget {
     required this.requestCompanyConsultation,
     this.doneRequestsData,
     this.archivedRequestsData,
+    required this.id, required this.currentIndex,
   });
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
+    final Stream<QuerySnapshot> dataStream = FirebaseFirestore.instance.collection('requests').snapshots();
 
     return Scaffold(
       appBar: AppBar(),
-      body: ListView.builder(
-        itemCount: 1,
-        itemBuilder: (context, index) => Column(
-        children: [
-          SizedBox(
-            height: height * 0.1,
-          ),
-          Text(
-            'Request From : ',
-            style:
-            Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 22.0),
-          ),
-          Container(
-            margin: const EdgeInsets.all(20),
-            child: Table(
-              defaultColumnWidth: const FixedColumnWidth(180.0),
-              border: TableBorder.all(
-                color: Colors.black,
-                style: BorderStyle.solid,
-                width: 2.5,
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              children: [
-                TableRow(
-                  children: [
-                    customTableKeyCell(text: 'Company Name', context: context),
-                    customTableValueCell(
-                      widget: requestCompanyName,
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    customTableKeyCell(text: 'City', context: context),
-                    customTableValueCell(
-                      widget: requestCompanyCity,
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    customTableKeyCell(text: 'School', context: context),
-                    customTableValueCell(
-                      widget: requestCompanySchool,
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    customTableKeyCell(text: 'Machine', context: context),
-                    customTableValueCell(
-                      widget: requestCompanyMachine,
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    customTableKeyCell(text: 'Machine Type', context: context),
-                    customTableValueCell(
-                      widget: requestCompanyMachineType,
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    customTableKeyCell(text: 'Consultation', context: context),
-                    customTableValueCell(
-                      widget: requestCompanyConsultation,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: height * 0.1,
-          ),
-          customRequestAction(
-            onTap: ()
+      body: StreamBuilder<QuerySnapshot>(
+        stream: dataStream,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot)
+        {
+          if(snapshot.hasError)
+          {
+            return Text('Something Wrong! ${snapshot.error}');
+          }else if (snapshot.hasData)
+          {
+            final List storeDocs = [];
+            snapshot.data!.docs.map((DocumentSnapshot documentSnapshot)
             {
-              navigateTo(context, FinishingRequestScreen(
-                requestCompanyName: requestCompanyName,
-                requestCompanyCity: requestCompanyCity,
-                requestCompanySchool: requestCompanySchool,
-                requestCompanyMachine: requestCompanyMachine,
-                requestCompanyMachineType: requestCompanyMachineType,
-              ));
-              //AppCubit.get(context).updateData(status: 'done', id: doneRequestsData!['id']);
-            },
-            backgroundColor: Colors.green,
-            icon: Icons.done,
-            label: 'Start Finish Request',
-          ),
-        ],
-      ),
+              Map users = documentSnapshot.data() as Map<String, dynamic>;
+              storeDocs.add(users);
+              users['uId'] = documentSnapshot.id;
+            }).toList();
+            return ListView.builder(
+              itemCount: 1,
+              itemBuilder: (context, index) => Column(
+                children: [
+                  SizedBox(
+                    height: height * 0.1,
+                  ),
+                  Text(
+                    'Request From : ',
+                    style:
+                    Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 22.0),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(20),
+                    child: Table(
+                      defaultColumnWidth: const FixedColumnWidth(180.0),
+                      border: TableBorder.all(
+                        color: Colors.black,
+                        style: BorderStyle.solid,
+                        width: 2.5,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      children: [
+                        TableRow(
+                          children: [
+                            customTableKeyCell(text: 'Company Name', context: context),
+                            customTableValueCell(
+                              text: storeDocs[currentIndex]['companyName'],
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            customTableKeyCell(text: 'City', context: context),
+                            customTableValueCell(
+                              text: storeDocs[currentIndex]['city'],
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            customTableKeyCell(text: 'School', context: context),
+                            customTableValueCell(
+                              text: storeDocs[currentIndex]['school'],
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            customTableKeyCell(text: 'Machine', context: context),
+                            customTableValueCell(
+                              text: storeDocs[currentIndex]['machine'],
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            customTableKeyCell(text: 'Machine Type', context: context),
+                            customTableValueCell(
+                              text: storeDocs[currentIndex]['machineType'],
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            customTableKeyCell(text: 'Consultation', context: context),
+                            customTableValueCell(
+                              text: storeDocs[currentIndex]['consultation'],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.1,
+                  ),
+                  customRequestAction(
+                    onTap: ()
+                    {
+                      navigateTo(context, FinishingRequestScreen(
+                        id: id,
+                        requestCompanyName: storeDocs[currentIndex]['companyName'],
+                        requestCompanyCity: storeDocs[currentIndex]['city'],
+                        requestCompanySchool: storeDocs[currentIndex]['school'],
+                        requestCompanyMachine: storeDocs[currentIndex]['machine'],
+                        requestCompanyMachineType: storeDocs[currentIndex]['machineType'],
+                      ));
+                      //AppCubit.get(context).updateData(status: 'done', id: doneRequestsData!['id']);
+                    },
+                    backgroundColor: Colors.green,
+                    icon: Icons.done,
+                    label: 'Start Finish Request',
+                  ),
+                ],
+              ),
+            );
+          }else
+          {
+            return const Center(child: CircularProgressIndicator(),);
+          }
+        },
       ),
     );
   }
@@ -150,7 +178,7 @@ class RequestDetails extends StatelessWidget {
       );
 
   Widget customTableValueCell({
-    required Widget widget,
+    required String text,
   }) =>
       Container(
         alignment: Alignment.centerLeft,
@@ -160,7 +188,10 @@ class RequestDetails extends StatelessWidget {
         ),
         child: Column(
           children: [
-            widget,
+            Text(
+              text,
+              style: const TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold,),
+            ),
           ],
         ),
       );

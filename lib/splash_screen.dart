@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
               radius: 60,
               child: Image(
                 image: AssetImage(
-                  'assets/images/logo.jpeg',
+                  'assets/images/baruziklogo.png',
                 ),
                 fit: BoxFit.cover,
                 height: 200.0,

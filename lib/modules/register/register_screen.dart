@@ -14,6 +14,7 @@ class RegisterScreen extends StatelessWidget {
 
   late var formKey = GlobalKey<FormState>();
   var nameController = TextEditingController();
+  var idController = TextEditingController();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var phoneController = TextEditingController();
@@ -76,6 +77,29 @@ class RegisterScreen extends StatelessWidget {
                           height: height * 0.033,
                         ),
 
+                        // TextFormField of ID
+                        defaultTextFormField(
+                          controller: idController,
+                          keyboardType: TextInputType.number,
+                          label: 'ID',
+                          textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color:
+                            AppCubit.get(context).isDark ? Colors.black : Colors.white,
+                          ),
+                          validator: (String? value) {
+                            if(value!.isEmpty)
+                            {
+                              return 'Please enter your ID';
+                            }
+                            return null;
+                          },
+                          prefix: Icons.perm_identity_outlined,
+                          prefixColor: AppCubit.get(context).isDark ? Colors.black : Colors.white,
+                        ),
+                        //SizedBox between Name and Email Address TextFormField
+                        SizedBox(
+                          height: height * 0.019,
+                        ),
                         // TextFormField of Name
                         defaultTextFormField(
                           controller: nameController,
@@ -163,7 +187,7 @@ class RegisterScreen extends StatelessWidget {
                           validator: (String? value) {
                             if(value!.isEmpty)
                             {
-                              return 'Please enter your email address';
+                              return 'Please enter your Password';
                             }
                             return null;
                           },
@@ -194,6 +218,7 @@ class RegisterScreen extends StatelessWidget {
                                     if(formKey.currentState!.validate())
                                     {
                                       RegisterCubit.get(context).userRegister(
+                                        id: idController.text,
                                         name: nameController.text,
                                         email: emailController.text,
                                         password: passwordController.text,

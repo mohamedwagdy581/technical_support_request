@@ -1,8 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 
 import '../../home_layout/home_layout.dart';
 import '../../shared/components/components.dart';
@@ -204,7 +202,7 @@ class LoginScreen extends StatelessWidget {
                         ),
 
                         // Google And FaceBook Signing In Row
-                        Row(
+                        /*Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             InkWell(
@@ -230,7 +228,7 @@ class LoginScreen extends StatelessWidget {
                               ),
                             ),
                           ],
-                        ),
+                        ),*/
                       ],
                     ),
                   ),

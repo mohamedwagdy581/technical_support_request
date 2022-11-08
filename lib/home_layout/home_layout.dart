@@ -171,9 +171,12 @@ class HomeLayout extends StatelessWidget {
               ),
               itemBuilder: (context, index) => customListTile(
                 onTapped: () {
+                  //navigateTo(context, DetailsScreen(index: index,id: cubit.docIDs[index],));
                   navigateTo(
                       context,
                       RequestDetails(
+                        currentIndex: index,
+                        id: cubit.docIDs[index],
                         requestCompanyName: GetRequestsData(
                           documentId: cubit.docIDs[index],
                           documentDataKey: 'companyName',

@@ -34,6 +34,7 @@ class AppCubit extends Cubit<AppStates> {
 
   Future getDocId() async
   {
+    docIDs.clear();
     await FirebaseFirestore.instance.collection('requests').get().then((snapshot)
     {
       for (var document in snapshot.docs) {

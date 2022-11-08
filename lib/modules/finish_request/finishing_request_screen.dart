@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -15,11 +16,12 @@ import 'requests_cubit/requests_states.dart';
 
 // ignore: must_be_immutable
 class FinishingRequestScreen extends StatelessWidget {
-  final Widget requestCompanyName;
-  final Widget requestCompanyCity;
-  final Widget requestCompanySchool;
-  final Widget requestCompanyMachine;
-  final Widget requestCompanyMachineType;
+  final String id;
+  final String requestCompanyName;
+  final String requestCompanyCity;
+  final String requestCompanySchool;
+  final String requestCompanyMachine;
+  final String requestCompanyMachineType;
 
   FinishingRequestScreen({
     super.key,
@@ -28,6 +30,7 @@ class FinishingRequestScreen extends StatelessWidget {
     required this.requestCompanySchool,
     required this.requestCompanyMachine,
     required this.requestCompanyMachineType,
+    required this.id,
   });
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -107,7 +110,6 @@ class FinishingRequestScreen extends StatelessWidget {
                                 // Store The File
                                 await referenceImageToUpload.putFile(File(RequestCubit.get(context).imagePath1!));
                                 machineImageUrl = await referenceImageToUpload.getDownloadURL();
-                                print('Machine Image : $machineImageUrl');
                               }catch(error)
                               {
                                 // Some Errors
@@ -205,7 +207,7 @@ class FinishingRequestScreen extends StatelessWidget {
                       // Location ListTile with DropdownButton
                       customRequestDetailsRow(
                         title: 'Location : ',
-                        //requestTitle: requestCompanyMachine,
+                        requestTitle: '',
                         trailingWidget: Padding(
                           padding: const EdgeInsets.only(right: 25.0),
                           child: IconButton(
@@ -292,8 +294,8 @@ class FinishingRequestScreen extends StatelessWidget {
                               print(_latitude);
                               print(_longitude);
                               print(requestCompanyName);
-                              print(machineImageUrl);
-                              print(machineTypeImageUrl);
+                              print('Machine Image : $machineImageUrl');
+                              print('Machine Type Image : $machineTypeImageUrl');
                             }
 
                             if(machineImageUrl.isEmpty && machineTypeImageUrl.isEmpty && damageImageUrl.isEmpty && _latitude == 0.0 && _longitude == 0.0)
@@ -319,6 +321,7 @@ class FinishingRequestScreen extends StatelessWidget {
                                   longitude: _longitude,
                                   latitude: _latitude,
                                 );
+                                FirebaseFirestore.instance.collection('requests').doc(id).delete();
 
                                 showToast(
                                   message:
@@ -340,6 +343,8 @@ class FinishingRequestScreen extends StatelessWidget {
                                       longitude: _longitude,
                                       latitude: _latitude,
                                     );
+
+                                    FirebaseFirestore.instance.collection('requests').doc(id).delete();
 
                                     showToast(
                                       message:
@@ -374,7 +379,7 @@ class FinishingRequestScreen extends StatelessWidget {
 
   Widget customRequestDetailsRow({
     required String title,
-    Widget? requestTitle,
+    required String requestTitle,
     Widget? trailingWidget,
   }) =>
       Container(
@@ -397,7 +402,7 @@ class FinishingRequestScreen extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 5.0),
-                  child: requestTitle,
+                  child: Text(requestTitle, style: const TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold,),),
                 ),
               ),
             ],

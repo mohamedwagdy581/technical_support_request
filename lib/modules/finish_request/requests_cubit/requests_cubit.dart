@@ -32,7 +32,7 @@ class RequestCubit extends Cubit<RequestStates>
     emit(RequestLoadingState());
     var user = FirebaseAuth.instance.currentUser;
 
-    FirebaseFirestore.instance.collection('doneRequests').doc(uId).get().then((value)
+    FirebaseFirestore.instance.collection(city).doc(city).collection('doneRequests').doc().get().then((value)
     {
 
       createDoneRequest(
@@ -87,9 +87,7 @@ class RequestCubit extends Cubit<RequestStates>
     );
 
     FirebaseFirestore.instance
-        .collection('doneRequests')
-        .doc()
-        .set(model.toJson())
+        .collection(city).doc(city).collection('doneRequests').doc().set(model.toJson())
         .then((value)
     {
       emit(CreateRequestSuccessState());
@@ -116,7 +114,7 @@ class RequestCubit extends Cubit<RequestStates>
     emit(RequestLoadingState());
     var user = FirebaseAuth.instance.currentUser;
 
-    FirebaseFirestore.instance.collection('archivedRequests').doc(uId).get().then((value)
+    FirebaseFirestore.instance.collection(city).doc(city).collection('archivedRequests').doc().get().then((value)
     {
 
       createArchivedRequest(
@@ -171,9 +169,7 @@ class RequestCubit extends Cubit<RequestStates>
     );
 
     FirebaseFirestore.instance
-        .collection('archivedRequests')
-        .doc()
-        .set(model.toJson())
+        .collection(city).doc(city).collection('archivedRequests').doc().set(model.toJson())
         .then((value)
     {
       emit(CreateRequestSuccessState());

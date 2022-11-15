@@ -7,32 +7,15 @@ import 'package:technical_requests/shared/components/components.dart';
 class RequestDetails extends StatelessWidget {
   final String id;
   final int currentIndex;
-  final Widget requestCompanyName;
-  final Widget requestCompanyCity;
-  final Widget requestCompanySchool;
-  final Widget requestCompanyMachine;
-  final Widget requestCompanyMachineType;
-  final Widget requestCompanyConsultation;
-  final Map<dynamic, dynamic>? doneRequestsData;
-  final Map<dynamic, dynamic>? archivedRequestsData;
-
   const RequestDetails({
     super.key,
-    required this.requestCompanyName,
-    required this.requestCompanyCity,
-    required this.requestCompanySchool,
-    required this.requestCompanyMachine,
-    required this.requestCompanyMachineType,
-    required this.requestCompanyConsultation,
-    this.doneRequestsData,
-    this.archivedRequestsData,
     required this.id, required this.currentIndex,
   });
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
-    final Stream<QuerySnapshot> dataStream = FirebaseFirestore.instance.collection('requests').snapshots();
+    final Stream<QuerySnapshot> dataStream = FirebaseFirestore.instance.collection('جازان').doc('جازان').collection('requests').snapshots();
 
     return Scaffold(
       appBar: AppBar(),
@@ -101,20 +84,29 @@ class RequestDetails extends StatelessWidget {
                         ),
                         TableRow(
                           children: [
+                            customTableKeyCell(text: 'Location', context: context),
+                            customTableValueCell(
+                              text: 'Latitude: ${storeDocs[currentIndex]['latitude']},',
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            customTableKeyCell(text: 'Location', context: context),
+                            customTableValueCell(
+                              text: 'Longitude: ${storeDocs[currentIndex]['longitude']},',
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
                             customTableKeyCell(text: 'Machine', context: context),
                             customTableValueCell(
                               text: storeDocs[currentIndex]['machine'],
                             ),
                           ],
                         ),
-                        TableRow(
-                          children: [
-                            customTableKeyCell(text: 'Machine Type', context: context),
-                            customTableValueCell(
-                              text: storeDocs[currentIndex]['machineType'],
-                            ),
-                          ],
-                        ),
+
                         TableRow(
                           children: [
                             customTableKeyCell(text: 'Consultation', context: context),

@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:technical_requests/shared/components/constants.dart';
 
 import '../../shared/components/components.dart';
 import '../../shared/network/cubit/cubit.dart';
@@ -18,6 +19,7 @@ class RegisterScreen extends StatelessWidget {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var phoneController = TextEditingController();
+  var areaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class RegisterScreen extends StatelessWidget {
         builder: (context, state)
         {
           var height = MediaQuery.of(context).size.height;
+          city = areaController.text;
 
           return Scaffold(
             appBar: AppBar(),
@@ -117,6 +120,30 @@ class RegisterScreen extends StatelessWidget {
                             return null;
                           },
                           prefix: Icons.person,
+                          prefixColor: AppCubit.get(context).isDark ? Colors.black : Colors.white,
+                        ),
+
+                        SizedBox(
+                          height: height * 0.019,
+                        ),
+
+                        // TextFormField of Name
+                        defaultTextFormField(
+                          controller: areaController,
+                          keyboardType: TextInputType.name,
+                          label: 'Area',
+                          textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color:
+                            AppCubit.get(context).isDark ? Colors.black : Colors.white,
+                          ),
+                          validator: (String? value) {
+                            if(value!.isEmpty)
+                            {
+                              return 'Please enter your Area';
+                            }
+                            return null;
+                          },
+                          prefix: Icons.area_chart_outlined,
                           prefixColor: AppCubit.get(context).isDark ? Colors.black : Colors.white,
                         ),
 
@@ -220,6 +247,7 @@ class RegisterScreen extends StatelessWidget {
                                       RegisterCubit.get(context).userRegister(
                                         id: idController.text,
                                         name: nameController.text,
+                                        area: areaController.text,
                                         email: emailController.text,
                                         password: passwordController.text,
                                         phone: phoneController.text,

@@ -32,6 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             CircleAvatar(
+              backgroundColor: Colors.transparent,
               radius: 60,
               child: Image(
                 image: AssetImage(

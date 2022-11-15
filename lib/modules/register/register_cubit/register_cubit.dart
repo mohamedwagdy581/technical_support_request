@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../models/user_model.dart';
 import 'register_states.dart';
@@ -17,6 +16,7 @@ class RegisterCubit extends Cubit<RegisterStates>
       {
         required String name,
         required String id,
+        required String area,
         required String email,
         required String password,
         required String phone,
@@ -37,6 +37,7 @@ class RegisterCubit extends Cubit<RegisterStates>
       //var displayName = value.user?.updateDisplayName(name);
       createUser(
         id: id,
+        area: area,
         name: name,
         email: value.user!.email.toString(),
         phone: phone,
@@ -56,6 +57,7 @@ class RegisterCubit extends Cubit<RegisterStates>
       {
         required String name,
         required String email,
+        required String area,
         required String phone,
         required String uId,
         required String id,
@@ -66,19 +68,19 @@ class RegisterCubit extends Cubit<RegisterStates>
 
     UserModel model = UserModel(
       email: email,
+      area: area,
       name: name,
       phone: phone,
       uId: uId,
       id: id,
       image: 'https://resources.premierleague.com/premierleague/photos/players/250x250/p118748.png',
       cover: 'https://img.freepik.com/free-photo/indecisive-girl-picks-from-two-choices-looks-questioned-troubled-crosses-hands-across-chest-hesitates-suggested-products-wears-yellow-t-shirt-isolated-crimson-wall_273609-42552.jpg?w=1380',
-      bio: 'Write your bio ...',
       isEmailVerified: false,
     );
 
     FirebaseFirestore.instance
-        .collection('technicals')
-        .doc(uId)
+        .collection(area)
+        .doc(area).collection('technicals').doc(uId)
         .set(model.toMap())
         .then((value)
     {

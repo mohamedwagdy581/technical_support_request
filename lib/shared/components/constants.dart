@@ -13,7 +13,7 @@ void signOut(context) {
 }
 
 String? uId;
-
+String? city;
 String profileImage = '';
 
 // void printFullText(String text) {

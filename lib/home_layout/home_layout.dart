@@ -13,7 +13,8 @@ import '../shared/network/cubit/cubit.dart';
 import '../shared/network/local/cash_helper.dart';
 
 class HomeLayout extends StatelessWidget {
-  const HomeLayout({Key? key}) : super(key: key);
+
+  const HomeLayout({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +72,7 @@ class HomeLayout extends StatelessWidget {
 
             InkWell(
               onTap: () {
-                navigateAndFinish(context, const HomeLayout());
+                navigateAndFinish(context, HomeLayout());
               },
               child: const ListTile(
                 title: Text(
@@ -177,35 +178,11 @@ class HomeLayout extends StatelessWidget {
                       RequestDetails(
                         currentIndex: index,
                         id: cubit.docIDs[index],
-                        requestCompanyName: GetRequestsData(
-                          documentId: cubit.docIDs[index],
-                          documentDataKey: 'companyName',
-                        ),
-                        requestCompanyCity: GetRequestsData(
-                          documentId: cubit.docIDs[index],
-                          documentDataKey: 'city',
-                        ),
-                        requestCompanySchool: GetRequestsData(
-                          documentId: cubit.docIDs[index],
-                          documentDataKey: 'school',
-                        ),
-                        requestCompanyMachine: GetRequestsData(
-
-                          documentId: cubit.docIDs[index],
-                          documentDataKey: 'machine',
-                        ),
-                        requestCompanyMachineType: GetRequestsData(
-                          documentId: cubit.docIDs[index],
-                          documentDataKey: 'machineType',
-                        ),
-                        requestCompanyConsultation: GetRequestsData(
-                          documentId: cubit.docIDs[index],
-                          documentDataKey: 'consultation',
-                        ),
                       ));
                   //print(cubit.docIDs[index]);
                 },
                 title: GetRequestsData(
+                  city: 'جازان',
                   documentId: cubit.docIDs[index],
                   documentDataKey: 'companyName',
                 ),

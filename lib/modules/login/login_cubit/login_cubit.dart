@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:technical_requests/shared/components/constants.dart';
 
 import 'login_states.dart';
 
@@ -22,7 +23,7 @@ class LoginCubit extends Cubit<LoginStates>
 
     FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value)
     {
-      emit(LoginSuccessState(value.user!.uid));
+      emit(LoginSuccessState(value.user!.uid, city, technicalPhone));
     }).catchError((error)
     {
       emit(LoginErrorState(error.toString()));
@@ -48,7 +49,7 @@ class LoginCubit extends Cubit<LoginStates>
 
     await FirebaseAuth.instance.signInWithCredential(credential).then((value)
     {
-      emit(LoginSuccessState(value.user!.uid));
+      emit(LoginSuccessState(value.user!.uid, city, technicalPhone));
       //emit(LoginWithGoogleSuccessState());
     }).catchError((error)
     {

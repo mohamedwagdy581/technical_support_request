@@ -125,6 +125,56 @@ Widget defaultButton({
       ),
     );
 
+Widget customButton({
+  required VoidCallback onPressed,
+  required String text,
+  Color? backgroundColor,
+}) =>
+    Container(
+      //height: 50.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor,
+          textStyle: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold,),
+          shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0),),),
+        ),
+        child: Text(
+          text,
+        ),
+      ),
+    );
+
+Widget customCard({
+  required VoidCallback onTap,
+  required String title,
+}) =>
+    Container(
+      padding: const EdgeInsets.all(5.0),
+      margin: const EdgeInsets.all(5.0),
+      height: 200.0,
+      width: 180.0,
+      child: InkWell(
+        onTap: onTap,
+        child: Card(
+          elevation: 15.0,
+          child: Center(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+
 Widget defaultTextButton({
   required VoidCallback onPressed,
   required String text,

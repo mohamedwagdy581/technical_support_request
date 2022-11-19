@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:technical_requests/home_layout/home_layout.dart';
+import 'package:technical_requests/modules/history/history_screen.dart';
 
 
 import '../../shared/components/components.dart';
 import '../../shared/components/constants.dart';
 import '../../shared/network/cubit/cubit.dart';
+import '../about_us/about_us_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -39,12 +41,27 @@ class SettingsScreen extends StatelessWidget {
               context: context,
               onTap: ()
               {
-                //navigateTo(context, const AboutUsScreen());
+                navigateTo(context, const AboutUsScreen());
               },
               prefixIcon: Icons.person,
               suffixIcon: FontAwesomeIcons.arrowRight,
               title: 'About us',
               subTitle: 'contact with us to solve your problem',
+            ),
+
+            SizedBox(
+              height: height * 0.033,
+            ),
+            customListTile(
+              context: context,
+              onTap: ()
+              {
+                navigateTo(context, const HistoryScreen());
+              },
+              prefixIcon: Icons.person,
+              suffixIcon: FontAwesomeIcons.arrowRight,
+              title: 'History',
+              subTitle: 'See all Done and Archived Requests',
             ),
 
             SizedBox(

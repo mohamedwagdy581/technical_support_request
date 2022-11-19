@@ -13,7 +13,10 @@ void signOut(context) {
 }
 
 String? uId;
-String? city;
+var city = 'a';
+var technicalPhone = 'a';
+/*String city = CashHelper.getData(key: 'city');
+String technicalPhone = CashHelper.getData(key: 'technicalPhone');*/
 String profileImage = '';
 
 // void printFullText(String text) {

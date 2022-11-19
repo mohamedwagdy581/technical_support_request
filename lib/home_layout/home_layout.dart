@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:technical_requests/modules/done_requests/done_requests.dart';
+import 'package:technical_requests/modules/all_requests/archived_requests/archived_requests_screen.dart';
+import 'package:technical_requests/modules/all_requests/done_requests/done_requests_screen.dart';
 import 'package:technical_requests/modules/settings_screen/settings_screen.dart';
 
+import '../modules/about_us/about_us_screen.dart';
 import '../modules/all_requests/get_requests_data.dart';
 import '../modules/login/login_screen.dart';
 import '../modules/request_details/request_details.dart';
@@ -12,9 +13,15 @@ import '../shared/components/constants.dart';
 import '../shared/network/cubit/cubit.dart';
 import '../shared/network/local/cash_helper.dart';
 
-class HomeLayout extends StatelessWidget {
+class HomeLayout extends StatefulWidget {
 
   const HomeLayout({Key? key,}) : super(key: key);
+
+  @override
+  State<HomeLayout> createState() => _HomeLayoutState();
+}
+
+class _HomeLayoutState extends State<HomeLayout> {
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +30,10 @@ class HomeLayout extends StatelessWidget {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     uId = CashHelper.getData(key: 'uId');
+    city = CashHelper.getData(key: 'city');
+    technicalPhone = CashHelper.getData(key: 'technicalPhone');
+    /*city = CashHelper.getData(key: 'city');
+    technicalPhone = CashHelper.getData(key: 'technicalPhone');*/
 
 
     return Scaffold(
@@ -72,7 +83,7 @@ class HomeLayout extends StatelessWidget {
 
             InkWell(
               onTap: () {
-                navigateAndFinish(context, HomeLayout());
+                navigateAndFinish(context, const HomeLayout());
               },
               child: const ListTile(
                 title: Text(
@@ -84,7 +95,6 @@ class HomeLayout extends StatelessWidget {
                 ),
               ),
             ),
-
             SizedBox(
               height: height * 0.03,
             ),
@@ -98,8 +108,26 @@ class HomeLayout extends StatelessWidget {
                   'Done Requests',
                 ),
                 leading: Icon(
-                  FontAwesomeIcons.thumbsUp,
+                  Icons.done_all,
                   color: Colors.green,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: height * 0.03,
+            ),
+
+            InkWell(
+              onTap: () {
+                navigateAndFinish(context, const ArchivedRequestsScreen());
+              },
+              child: const ListTile(
+                title: Text(
+                  'Archived Requests',
+                ),
+                leading: Icon(
+                  Icons.archive_outlined,
+                  color: Colors.red,
                 ),
               ),
             ),
@@ -133,7 +161,7 @@ class HomeLayout extends StatelessWidget {
             InkWell(
               onTap: ()
               {
-                //navigateTo(context, const AboutUsScreen());
+                navigateTo(context, const AboutUsScreen());
               },
               child: const ListTile(
                 title: Text('About'),
@@ -160,59 +188,71 @@ class HomeLayout extends StatelessWidget {
         ),
       ),
 
-      body: FutureBuilder(
-        future: cubit.getDocId(),
-        builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.done)
-          {
-            return ListView.separated(
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10.0,
-              ),
-              itemBuilder: (context, index) => customListTile(
-                onTapped: () {
-                  //navigateTo(context, DetailsScreen(index: index,id: cubit.docIDs[index],));
-                  navigateTo(
-                      context,
-                      RequestDetails(
-                        currentIndex: index,
-                        id: cubit.docIDs[index],
-                      ));
-                  //print(cubit.docIDs[index]);
-                },
-                title: GetRequestsData(
-                  city: 'جازان',
-                  documentId: cubit.docIDs[index],
-                  documentDataKey: 'companyName',
+      body: RefreshIndicator(
+        onRefresh: () async
+        {
+          setState(() {
+
+          });
+        },
+        child: FutureBuilder(
+          future: cubit.getDocId(),
+          builder: (context, snapshot) {
+            if(snapshot.connectionState == ConnectionState.done)
+            {
+              return ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10.0,
                 ),
-                leadingWidget: Icon(
-                  Icons.history_outlined,
-                  color: AppCubit.get(context).isDark
-                      ? Colors.blue
-                      : Colors.deepOrange,
-                ),
-                trailingWidget: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Icon(
-                    Icons.chevron_right,
+                itemBuilder: (context, index) => customListTile(
+                  onTapped: () {
+                    print(technicalPhone);
+                    //navigateTo(context, DetailsScreen(index: index,id: cubit.docIDs[index],));
+                    navigateTo(
+                        context,
+                        RequestDetails(
+                          technicalPhone: technicalPhone,
+                          city: city,
+                          currentIndex: index,
+                          id: cubit.docIDs[index],
+                        ));
+                    //print(cubit.docIDs[index]);
+                  },
+                  title: GetRequestsData(
+                    city: city,
+                    collection: 'requests',
+                    documentId: cubit.docIDs[index],
+                    documentDataKey: 'companyName',
+                  ),
+                  leadingWidget: Icon(
+                    Icons.history_outlined,
                     color: AppCubit.get(context).isDark
                         ? Colors.blue
                         : Colors.deepOrange,
                   ),
+                  trailingWidget: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(
+                      Icons.chevron_right,
+                      color: AppCubit.get(context).isDark
+                          ? Colors.blue
+                          : Colors.deepOrange,
+                    ),
+                  ),
                 ),
-              ),
-              separatorBuilder: (context, index) => const Divider(
-                thickness: 2.0,
-              ),
-              itemCount: cubit.docIDs.length,
+                separatorBuilder: (context, index) => const Divider(
+                  thickness: 2.0,
+                ),
+                itemCount: cubit.docIDs.length,
+              );
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
 
-        },
+          },
+        ),
       ),
     );
   }

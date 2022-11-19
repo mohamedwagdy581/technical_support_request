@@ -30,6 +30,30 @@ class AppGetDocIDsErrorState extends AppStates
   AppGetDocIDsErrorState(this.error);
 }
 
+// App Get All Done Document IDs State
+class AppGetDoneDocIDsLoadingState extends AppStates {}
+
+class AppGetDoneDocIDsSuccessState extends AppStates {}
+
+class AppGetDoneDocIDsErrorState extends AppStates
+{
+  final String error;
+
+  AppGetDoneDocIDsErrorState(this.error);
+}
+
+// App Get All Archived Document IDs State
+class AppGetArchivedDocIDsLoadingState extends AppStates {}
+
+class AppGetArchivedDocIDsSuccessState extends AppStates {}
+
+class AppGetArchivedDocIDsErrorState extends AppStates
+{
+  final String error;
+
+  AppGetArchivedDocIDsErrorState(this.error);
+}
+
 
 // Change Mode Theme of App
 class AppChangeModeThemeState extends AppStates {}

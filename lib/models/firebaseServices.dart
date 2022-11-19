@@ -78,7 +78,7 @@ class FirebaseService {
             if (value.user != null) {
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomeLayout()),
+                  MaterialPageRoute(builder: (context) =>  const HomeLayout()),
                   (route) => false);
             }
           });
@@ -104,7 +104,7 @@ class FirebaseService {
         if (value.user != null) {
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => const HomeLayout()),
+              MaterialPageRoute(builder: (context) =>  const HomeLayout()),
               (route) => false);
           updateUserData(value.user!);
         }

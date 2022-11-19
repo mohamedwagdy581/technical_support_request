@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:technical_requests/shared/components/fUser.dart';
 
 import '../../../models/user_model.dart';
 import '../../components/constants.dart';
@@ -18,7 +19,7 @@ class AppCubit extends Cubit<AppStates> {
   void getUserData() {
     emit(AppGetUserLoadingState());
 
-    FirebaseFirestore.instance.collection('users').doc(uId).get().then((value) {
+    FirebaseFirestore.instance.collection(city).doc(city).collection('users').doc(uId).get().then((value) {
       userModel = UserModel.fromJson(value.data()!);
       emit(AppGetUserSuccessState());
     }).catchError((error) {
@@ -36,7 +37,7 @@ class AppCubit extends Cubit<AppStates> {
   {
     emit(AppGetDocIDsLoadingState());
     docIDs.clear();
-    await FirebaseFirestore.instance.collection('جازان').doc('جازان').collection('requests').get().then((snapshot)
+    await FirebaseFirestore.instance.collection(city).doc(city).collection('requests').get().then((snapshot)
     {
       for (var document in snapshot.docs) {
         docIDs.add(document.reference.id);
@@ -46,6 +47,46 @@ class AppCubit extends Cubit<AppStates> {
     }).catchError((error)
     {
       emit(AppGetDocIDsErrorState(error));
+    });
+  }
+
+  // Get Done Document IDs to start access to all data in document in firebase
+  List<String> doneDocIDs = [];
+
+  Future getDoneDocId({required String city}) async
+  {
+    print(city);
+    emit(AppGetDoneDocIDsLoadingState());
+    doneDocIDs.clear();
+    await FirebaseFirestore.instance.collection(city).doc(city).collection('technicals').doc(userUID).collection('doneRequests').get().then((
+        snapshot) {
+      for (var document in snapshot.docs) {
+        doneDocIDs.add(document.reference.id);
+        emit(AppGetDoneDocIDsSuccessState());
+      }
+    }).catchError((error)
+    {
+      emit(AppGetDoneDocIDsErrorState(error));
+    });
+  }
+
+
+  // Get Archived Document IDs to start access to all data in document in firebase
+  List<String> archivedDocIDs = [];
+
+  Future getArchivedDocId({required String city}) async
+  {
+    archivedDocIDs.clear();
+    emit(AppGetArchivedDocIDsLoadingState());
+    await FirebaseFirestore.instance.collection(city).doc(city).collection('technicals').doc(userUID).collection('archivedRequests').get().then((
+        snapshot) {
+      for (var document in snapshot.docs) {
+        archivedDocIDs.add(document.reference.id);
+        emit(AppGetArchivedDocIDsSuccessState());
+      }
+    }).catchError((error)
+    {
+      emit(AppGetArchivedDocIDsErrorState(error));
     });
   }
 

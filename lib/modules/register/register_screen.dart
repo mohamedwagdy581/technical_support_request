@@ -10,16 +10,37 @@ import 'register_cubit/register_cubit.dart';
 import 'register_cubit/register_states.dart';
 
 // ignore: must_be_immutable
-class RegisterScreen extends StatelessWidget {
-  RegisterScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   late var formKey = GlobalKey<FormState>();
+
   var nameController = TextEditingController();
+
   var idController = TextEditingController();
+
   var emailController = TextEditingController();
+
   var passwordController = TextEditingController();
+
   var phoneController = TextEditingController();
+
   var areaController = TextEditingController();
+
+  int _areaValue = 0;
+  String _area = '';
+  var areas = <String>[
+    'إختر المنطقة؟',
+    'أبوعريش',
+    'جازان',
+    'أحدالمسارحة',
+    'العارضة',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +58,14 @@ class RegisterScreen extends StatelessWidget {
         builder: (context, state)
         {
           var height = MediaQuery.of(context).size.height;
-          city = areaController.text;
+          city = _area;
+          technicalPhone = phoneController.text;
 
           return Scaffold(
             appBar: AppBar(),
             body: Center(
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Padding(
                   padding: const EdgeInsets.all(25.0),
                   child: Form(
@@ -56,7 +79,7 @@ class RegisterScreen extends StatelessWidget {
                               .of(context)
                               .textTheme
                               .bodyText1?.copyWith(
-                            fontSize: 35.0,
+                            fontSize: 30.0,
                           ),
                         ),
 
@@ -77,7 +100,7 @@ class RegisterScreen extends StatelessWidget {
                         ),
 
                         SizedBox(
-                          height: height * 0.033,
+                          height: height * 0.031,
                         ),
 
                         // TextFormField of ID
@@ -127,8 +150,39 @@ class RegisterScreen extends StatelessWidget {
                           height: height * 0.019,
                         ),
 
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: Colors.grey[300],
+                          ),
+                          child: ListTile(
+                            title: const Text(
+                              'Select Your Area',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                              ),
+                            ),
+                            trailing: DropdownButton<String>(
+                              hint: const Text('Area',textAlign: TextAlign.end,),
+                              value: areas[_areaValue],
+                              items: areas.map((String areaValue) {
+                                return DropdownMenuItem<String>(
+                                  value: areaValue,
+                                  child: Text(areaValue),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _areaValue = areas.indexOf(value!);
+                                  _area = value.toString();
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+
                         // TextFormField of Name
-                        defaultTextFormField(
+                        /*defaultTextFormField(
                           controller: areaController,
                           keyboardType: TextInputType.name,
                           label: 'Area',
@@ -145,7 +199,7 @@ class RegisterScreen extends StatelessWidget {
                           },
                           prefix: Icons.area_chart_outlined,
                           prefixColor: AppCubit.get(context).isDark ? Colors.black : Colors.white,
-                        ),
+                        ),*/
 
                         //SizedBox between Name and Email Address TextFormField
                         SizedBox(
@@ -180,7 +234,7 @@ class RegisterScreen extends StatelessWidget {
                         // TextFormField of Phone
                         defaultTextFormField(
                           controller: phoneController,
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.phone,
                           label: 'Phone',
                           textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color:
@@ -247,7 +301,7 @@ class RegisterScreen extends StatelessWidget {
                                       RegisterCubit.get(context).userRegister(
                                         id: idController.text,
                                         name: nameController.text,
-                                        area: areaController.text,
+                                        area: _area,
                                         email: emailController.text,
                                         password: passwordController.text,
                                         phone: phoneController.text,

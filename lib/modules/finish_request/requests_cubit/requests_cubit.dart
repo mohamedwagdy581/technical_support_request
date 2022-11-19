@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:technical_requests/shared/components/constants.dart';
+import 'package:technical_requests/shared/components/fUser.dart';
 
 import '../../../models/request_model.dart';
 import 'requests_states.dart';
@@ -21,6 +21,8 @@ class RequestCubit extends Cubit<RequestStates>
         required String city,
         required String companyName,
         required String school,
+        required String technicalPhone,
+        required String customerPhone,
         required String machineImage,
         required String machineTypeImage,
         required String damageImage,
@@ -40,6 +42,8 @@ class RequestCubit extends Cubit<RequestStates>
         companyName: companyName,
         technicalName: user!.displayName.toString(),
         school: school,
+        technicalPhone: technicalPhone,
+        customerPhone: customerPhone,
         machineImage: machineImage,
         uId: value.id.toString(),
         machineTypeImage: machineTypeImage.toString(),
@@ -55,13 +59,14 @@ class RequestCubit extends Cubit<RequestStates>
     });
   }
 
-  // Create Done Request Model
   void createDoneRequest(
       {
         required String city,
         required String companyName,
         required String technicalName,
         required String school,
+        required String technicalPhone,
+        required String customerPhone,
         required String machineImage,
         required String uId,
         required String machineTypeImage,
@@ -77,6 +82,8 @@ class RequestCubit extends Cubit<RequestStates>
       companyName: companyName,
       technicalName: technicalName,
       school: school,
+      technicalPhone: technicalPhone,
+      customerPhone: customerPhone,
       machineImage: machineImage,
       uId: uId,
       machineTypeImage: machineTypeImage,
@@ -97,12 +104,104 @@ class RequestCubit extends Cubit<RequestStates>
     });
   }
 
+  // Done Technical History Requests
+  void technicalDoneHistoryRequest(
+      {
+        required String city,
+        required String companyName,
+        required String school,
+        required String technicalPhone,
+        required String customerPhone,
+        required String machineImage,
+        required String machineTypeImage,
+        required String damageImage,
+        required String consultation,
+        required double latitude,
+        required double longitude,
+      })
+  {
+    emit(DoneHistoryRequestLoadingState());
+    var user = FirebaseAuth.instance.currentUser;
+
+    FirebaseFirestore.instance.collection(city).doc(city).collection('technicals').doc(userUID).collection('doneRequest').doc().get().then((value)
+    {
+
+      createDoneHistoryRequest(
+        city: city,
+        companyName: companyName,
+        technicalName: user!.displayName.toString(),
+        school: school,
+        technicalPhone: technicalPhone,
+        customerPhone: customerPhone,
+        machineImage: machineImage,
+        uId: value.id.toString(),
+        machineTypeImage: machineTypeImage.toString(),
+        damageImage: damageImage.toString(),
+        consultation: consultation.toString(),
+        latitude: latitude,
+        longitude: longitude,
+        //isEmailVerified: value.user!.emailVerified.toString(),
+      );
+    }).catchError((error)
+    {
+      emit(DoneHistoryRequestErrorState(error.toString()));
+    });
+  }
+
+  // Create Done History Request Model
+  void createDoneHistoryRequest(
+      {
+        required String city,
+        required String companyName,
+        required String technicalName,
+        required String school,
+        required String technicalPhone,
+        required String customerPhone,
+        required String machineImage,
+        required String uId,
+        required String machineTypeImage,
+        required String damageImage,
+        required String consultation,
+        required double latitude,
+        required double longitude,
+      })
+  {
+
+    RequestModel model = RequestModel(
+      city: city,
+      companyName: companyName,
+      technicalName: technicalName,
+      school: school,
+      technicalPhone: technicalPhone,
+      customerPhone: customerPhone,
+      machineImage: machineImage,
+      uId: uId,
+      machineTypeImage: machineTypeImage,
+      damageImage: damageImage,
+      consultation: consultation,
+      latitude: latitude,
+      longitude: longitude,
+    );
+
+    FirebaseFirestore.instance
+        .collection(city).doc(city).collection('technicals').doc(userUID).collection('doneRequests').doc().set(model.toJson())
+        .then((value)
+    {
+      emit(CreateDoneHistoryRequestSuccessState());
+    }).catchError((error)
+    {
+      emit(CreateDoneHistoryRequestErrorState(error.toString()));
+    });
+  }
+
   // Archived Technical Requests
   void technicalArchivedRequest(
       {
         required String city,
         required String companyName,
         required String school,
+        required String technicalPhone,
+        required String customerPhone,
         required String machineImage,
         required String machineTypeImage,
         required String damageImage,
@@ -122,6 +221,8 @@ class RequestCubit extends Cubit<RequestStates>
         companyName: companyName,
         technicalName: user!.displayName.toString(),
         school: school,
+        technicalPhone: technicalPhone,
+        customerPhone: customerPhone,
         machineImage: machineImage,
         uId: value.id.toString(),
         machineTypeImage: machineTypeImage.toString(),
@@ -144,6 +245,8 @@ class RequestCubit extends Cubit<RequestStates>
         required String companyName,
         required String technicalName,
         required String school,
+        required String technicalPhone,
+        required String customerPhone,
         required String machineImage,
         required String uId,
         required String machineTypeImage,
@@ -159,6 +262,8 @@ class RequestCubit extends Cubit<RequestStates>
       companyName: companyName,
       technicalName: technicalName,
       school: school,
+      technicalPhone: technicalPhone,
+      customerPhone: customerPhone,
       machineImage: machineImage,
       uId: uId,
       machineTypeImage: machineTypeImage,
@@ -180,6 +285,95 @@ class RequestCubit extends Cubit<RequestStates>
   }
 
 
+  // Done Technical History Requests
+  void technicalArchivedHistoryRequest(
+      {
+        required String city,
+        required String companyName,
+        required String school,
+        required String technicalPhone,
+        required String customerPhone,
+        required String machineImage,
+        required String machineTypeImage,
+        required String damageImage,
+        required String consultation,
+        required double latitude,
+        required double longitude,
+      })
+  {
+    emit(ArchivedHistoryRequestLoadingState());
+    var user = FirebaseAuth.instance.currentUser;
+
+    FirebaseFirestore.instance.collection(city).doc(city).collection('technicals').doc(userUID).collection('archivedRequests').doc().get().then((value)
+    {
+
+      createArchivedHistoryRequest(
+        city: city,
+        companyName: companyName,
+        technicalName: user!.displayName.toString(),
+        school: school,
+        technicalPhone: technicalPhone,
+        customerPhone: customerPhone,
+        machineImage: machineImage,
+        uId: value.id.toString(),
+        machineTypeImage: machineTypeImage.toString(),
+        damageImage: damageImage.toString(),
+        consultation: consultation.toString(),
+        latitude: latitude,
+        longitude: longitude,
+        //isEmailVerified: value.user!.emailVerified.toString(),
+      );
+    }).catchError((error)
+    {
+      emit(ArchivedHistoryRequestErrorState(error.toString()));
+    });
+  }
+
+  // Create Done History Request Model
+  void createArchivedHistoryRequest(
+      {
+        required String city,
+        required String companyName,
+        required String technicalName,
+        required String school,
+        required String technicalPhone,
+        required String customerPhone,
+        required String machineImage,
+        required String uId,
+        required String machineTypeImage,
+        required String damageImage,
+        required String consultation,
+        required double latitude,
+        required double longitude,
+      })
+  {
+
+    RequestModel model = RequestModel(
+      city: city,
+      companyName: companyName,
+      technicalName: technicalName,
+      school: school,
+      technicalPhone: technicalPhone,
+      customerPhone: customerPhone,
+      machineImage: machineImage,
+      uId: uId,
+      machineTypeImage: machineTypeImage,
+      damageImage: damageImage,
+      consultation: consultation,
+      latitude: latitude,
+      longitude: longitude,
+    );
+
+    FirebaseFirestore.instance
+        .collection(city).doc(city).collection('technicals').doc(userUID).collection('archivedRequests').doc().set(model.toJson())
+        .then((value)
+    {
+      emit(CreateArchivedHistoryRequestSuccessState());
+    }).catchError((error)
+    {
+      emit(CreateArchivedHistoryRequestErrorState(error.toString()));
+    });
+  }
 
 
   String? imagePath1;
@@ -227,12 +421,13 @@ class RequestCubit extends Cubit<RequestStates>
 
 
   IconData locationIcon = Icons.add_location_alt_outlined;
-  bool isLocation = true;
-  void changePasswordVisibility ()
+  bool isLocation = false;
+  void changeLocationIcon()
   {
     isLocation = !isLocation;
-    locationIcon = isLocation ? Icons.add_location_alt_outlined : Icons.done_outline_rounded;
-    emit(RequestChangeLocationState());
+    locationIcon = isLocation ? Icons.add_location_alt_outlined : Icons.done_all;
+
+    emit(ChangeLocationIconState());
   }
 
 

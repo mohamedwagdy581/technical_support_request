@@ -16,7 +16,9 @@ void main() async {
   await CashHelper.init();
   bool? isDark = CashHelper.getData(key: 'isDark');
   uId = CashHelper.getData(key: 'uId');
-  city = CashHelper.getData(key: 'city');
+  //city = CashHelper.getData(key: 'city');
+  //technicalPhone = CashHelper.getData(key: 'technicalPhone');
+
   runApp(TechnicalRequests(isDark: isDark,));
 }
 

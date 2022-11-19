@@ -12,7 +12,7 @@ class CashHelper
   // Function to get data from sharedPreferences
   static dynamic getData({required String key,})
   {
-    return sharedPreferences!.get(key);
+    return sharedPreferences?.get(key);
   }
 
 

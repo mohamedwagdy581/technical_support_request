@@ -41,7 +41,8 @@ class LoginScreen extends StatelessWidget {
               key: 'uId',
               value: state.uId,
             ).then((value) {
-
+              CashHelper.saveData(key: 'city', value: state.city);
+              CashHelper.saveData(key: 'technicalPhone', value: state.technicalPhone);
               navigateAndFinish(
                 context,
                 const HomeLayout(),
@@ -193,7 +194,7 @@ class LoginScreen extends StatelessWidget {
                               onPressed: () {
                                 navigateAndFinish(
                                   context,
-                                  RegisterScreen(),
+                                  const RegisterScreen(),
                                 );
                               },
                               text: 'REGISTER',

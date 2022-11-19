@@ -6,19 +6,20 @@ import '../../shared/network/cubit/cubit.dart';
 
 class GetRequestsData extends StatelessWidget {
   final String city;
+  final String collection;
   final String documentId;
   final String documentDataKey;
 
   const GetRequestsData({
     super.key,
     required this.documentId,
-    required this.documentDataKey, required this.city,
+    required this.documentDataKey, required this.city, required this.collection,
   });
   @override
   Widget build(BuildContext context) {
     // Get the Collection
 
-    final CollectionReference requests = FirebaseFirestore.instance.collection(city).doc(city).collection('requests');
+    final CollectionReference requests = FirebaseFirestore.instance.collection(city).doc(city).collection(collection);
 
     return FutureBuilder<DocumentSnapshot>(
       future: requests.doc(documentId).get(),

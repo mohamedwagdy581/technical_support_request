@@ -1,54 +1,55 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:technical_requests/models/locationServices.dart';
-import 'package:technical_requests/modules/finish_request/finishing_request_screen.dart';
-import 'package:technical_requests/shared/components/components.dart';
+import 'package:technical_requests/shared/components/fUser.dart';
 
-class RequestDetails extends StatelessWidget {
-  final String city;
-  final String technicalPhone;
+import '../../../models/locationServices.dart';
+import '../../../shared/components/components.dart';
+
+class DoneArchivedDetailsScreen extends StatefulWidget {
   final String id;
+  final String collection;
   final int currentIndex;
+  final String city;
 
-  const RequestDetails({
+  const DoneArchivedDetailsScreen({
     super.key,
-    required this.id,
-    required this.currentIndex,
-    required this.city, required this.technicalPhone,
+    required this.currentIndex, required this.city, required this.id, required this.collection,
   });
 
   @override
+  State<DoneArchivedDetailsScreen> createState() => _RequestDetailsState();
+}
+
+class _RequestDetailsState extends State<DoneArchivedDetailsScreen> {
+  @override
   Widget build(BuildContext context) {
-    LocationServices locationServices = LocationServices();
     var height = MediaQuery.of(context).size.height;
-    final Stream<QuerySnapshot> dataStream = FirebaseFirestore.instance
-        .collection(city)
-        .doc(city)
-        .collection('requests')
-        .snapshots();
+    final Stream<QuerySnapshot> dataStream = FirebaseFirestore.instance.collection(widget.city).doc(widget.city).collection('technicals').doc(userUID).collection(widget.collection).snapshots();
 
     return Scaffold(
       appBar: AppBar(),
       body: StreamBuilder<QuerySnapshot>(
         stream: dataStream,
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot)
+        {
+          if(snapshot.hasError)
+          {
             return Text('Something Wrong! ${snapshot.error}');
-          } else if (snapshot.hasData) {
+          }else if (snapshot.hasData)
+          {
             final List storeDocs = [];
-            snapshot.data!.docs.map((DocumentSnapshot documentSnapshot) {
+            snapshot.data!.docs.map((DocumentSnapshot documentSnapshot)
+            {
               Map users = documentSnapshot.data() as Map<String, dynamic>;
               storeDocs.add(users);
               users['uId'] = documentSnapshot.id;
             }).toList();
             return ListView.builder(
+              physics: const BouncingScrollPhysics(),
               itemCount: 1,
               itemBuilder: (context, index) {
-                var latitude = storeDocs[currentIndex]['latitude'];
-                var longitude = storeDocs[currentIndex]['longitude'];
-                print('Latitude: $latitude');
-                print('Longitude: $longitude');
-                print('Technical Phone : $technicalPhone');
+                var latitude = storeDocs[widget.currentIndex]['latitude'];
+                var longitude = storeDocs[widget.currentIndex]['longitude'];
                 return Column(
                   children: [
                     SizedBox(
@@ -56,10 +57,8 @@ class RequestDetails extends StatelessWidget {
                     ),
                     Text(
                       'Request From : ',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText1
-                          ?.copyWith(fontSize: 22.0),
+                      style:
+                      Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 22.0),
                     ),
                     Container(
                       margin: const EdgeInsets.all(20),
@@ -74,37 +73,49 @@ class RequestDetails extends StatelessWidget {
                         children: [
                           TableRow(
                             children: [
-                              customTableKeyCell(
-                                  text: 'Company Name', context: context),
+                              customTableKeyCell(text: 'Company Name', context: context),
                               customTableValueCell(
-                                text: storeDocs[currentIndex]['companyName'],
+                                text: storeDocs[widget.currentIndex]['companyName'],
                               ),
                             ],
                           ),
                           TableRow(
                             children: [
-                              customTableKeyCell(
-                                  text: 'City', context: context),
+                              customTableKeyCell(text: 'City', context: context),
                               customTableValueCell(
-                                text: storeDocs[currentIndex]['city'],
+                                text: storeDocs[widget.currentIndex]['city'],
                               ),
                             ],
                           ),
                           TableRow(
                             children: [
-                              customTableKeyCell(
-                                  text: 'School', context: context),
+                              customTableKeyCell(text: 'School', context: context),
                               customTableValueCell(
-                                text: storeDocs[currentIndex]['school'],
+                                text: storeDocs[widget.currentIndex]['school'],
                               ),
                             ],
                           ),
                           TableRow(
                             children: [
-                              customTableKeyCell(
-                                  text: 'Phone', context: context),
+                              customTableKeyCell(text: 'Customer Phone', context: context),
                               customTableValueCell(
-                                text: storeDocs[currentIndex]['phone'],
+                                text: storeDocs[widget.currentIndex]['customerPhone'],
+                              ),
+                            ],
+                          ),
+                          TableRow(
+                            children: [
+                              customTableKeyCell(text: 'Technical Name', context: context),
+                              customTableValueCell(
+                                text: storeDocs[widget.currentIndex]['technicalName'],
+                              ),
+                            ],
+                          ),
+                          TableRow(
+                            children: [
+                              customTableKeyCell(text: 'Technical Phone', context: context),
+                              customTableValueCell(
+                                text: storeDocs[widget.currentIndex]['technicalPhone'],
                               ),
                             ],
                           ),
@@ -135,61 +146,47 @@ class RequestDetails extends StatelessWidget {
                           ),
                           TableRow(
                             children: [
-                              customTableKeyCell(
-                                  text: 'Machine', context: context),
+                              customTableKeyCell(text: 'Machine Image', context: context),
                               customTableValueCell(
-                                text: storeDocs[currentIndex]['machine'],
+                                text: storeDocs[widget.currentIndex]['machineImage'],
                               ),
                             ],
                           ),
                           TableRow(
                             children: [
-                              customTableKeyCell(
-                                  text: 'Consultation', context: context),
+                              customTableKeyCell(text: 'Machine Type Image', context: context),
                               customTableValueCell(
-                                text: storeDocs[currentIndex]['consultation'],
+                                text: storeDocs[widget.currentIndex]['machineTypeImage'],
+                              ),
+                            ],
+                          ),
+                          TableRow(
+                            children: [
+                              customTableKeyCell(text: 'Damage Image', context: context),
+                              customTableValueCell(
+                                text: storeDocs[widget.currentIndex]['damageImage'],
+                              ),
+                            ],
+                          ),
+
+                          TableRow(
+                            children: [
+                              customTableKeyCell(text: 'Consultation', context: context),
+                              customTableValueCell(
+                                text: storeDocs[widget.currentIndex]['consultation'],
                               ),
                             ],
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: height * 0.1,
-                    ),
-                    customRequestAction(
-                      onTap: () {
-                        navigateTo(
-                            context,
-                            FinishingRequestScreen(
-                              id: id,
-                              companyName: storeDocs[currentIndex]
-                                  ['companyName'],
-                              city: storeDocs[currentIndex]
-                                  ['city'],
-                              school: storeDocs[currentIndex]
-                                  ['school'],
-                              customerPhone: storeDocs[currentIndex]
-                              ['phone'],
-                              machine: storeDocs[currentIndex]
-                                  ['machine'],
-                              technicalPhone: technicalPhone ,
-                            ),
-                        );
-                        //AppCubit.get(context).updateData(status: 'done', id: doneRequestsData!['id']);
-                      },
-                      backgroundColor: Colors.green,
-                      icon: Icons.done,
-                      label: 'Start Finish Request',
-                    ),
                   ],
                 );
               },
             );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+          }else
+          {
+            return const Center(child: CircularProgressIndicator(),);
           }
         },
       ),
@@ -209,9 +206,9 @@ class RequestDetails extends StatelessWidget {
         child: Text(
           text,
           style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                fontSize: 20.0,
-                fontWeight: FontWeight.normal,
-              ),
+            fontSize: 20.0,
+            fontWeight: FontWeight.normal,
+          ),
         ),
       );
 
@@ -228,10 +225,7 @@ class RequestDetails extends StatelessWidget {
           children: [
             Text(
               text,
-              style: const TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold,),
             ),
           ],
         ),

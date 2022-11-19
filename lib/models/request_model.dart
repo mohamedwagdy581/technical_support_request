@@ -4,6 +4,8 @@ class RequestModel {
   String? companyName;
   String? technicalName;
   String? school;
+  String? technicalPhone;
+  String? customerPhone;
   String? machineImage;
   String? machineTypeImage;
   String? damageImage;
@@ -17,6 +19,8 @@ class RequestModel {
     required this.companyName,
     required this.technicalName,
     required this.school,
+    required this.technicalPhone,
+    required this.customerPhone,
     required this.machineImage,
     required this.machineTypeImage,
     required this.damageImage,
@@ -32,6 +36,8 @@ class RequestModel {
     'companyName' : companyName,
     'technicalName' : technicalName,
     'school' : school,
+    'technicalPhone' : technicalPhone,
+    'customerPhone' : customerPhone,
     'machineImage' : machineImage,
     'machineTypeImage' : machineTypeImage,
     'damageImage' : damageImage,
@@ -48,6 +54,8 @@ class RequestModel {
     companyName = json['companyName'];
     technicalName = json['technicalName'];
     school = json['school'];
+    technicalPhone = json['technicalPhone'];
+    customerPhone = json['customerPhone'];
     machineImage = json['machineImage'];
     machineTypeImage = json['machineTypeImage'];
     damageImage = json['damageImage'];

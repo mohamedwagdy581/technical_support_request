@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:technical_requests/home_layout/home_layout.dart';
 
 import '../../shared/components/components.dart';
@@ -44,12 +45,16 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
 
   var consultationController = TextEditingController();
 
+  ImagePicker imagePicker = ImagePicker();
   String uniqueImageName = DateTime.now().millisecondsSinceEpoch.toString();
 
+  XFile? image1;
   String machineImageUrl ='';
 
+  XFile? image2;
   String machineTypeImageUrl ='';
 
+  XFile? image3;
   String damageImageUrl ='';
 
   var locationMessage = '';
@@ -74,9 +79,14 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
     });
   }
 
+  showSnackBar(String snackText, Duration d)
+  {
+    final snackBar = SnackBar(content: Text(snackText), duration: d,);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
-    //technicalPhone = CashHelper.getData(key: 'technicalPhone');
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return BlocProvider(
@@ -153,9 +163,7 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
                                 children: [
                                   defaultOutlineAddButton(
                                     onPressed: () async {
-
-                                      RequestCubit.get(context).pickImage(1);
-
+                                      image1 = await imagePicker.pickImage(source: ImageSource.camera);
                                       // Get Reference To Storage Root
                                       Reference referenceRoot = FirebaseStorage.instance.ref();
                                       Reference referenceDirImages = referenceRoot.child('images');
@@ -163,21 +171,20 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
                                       // Create Reference for the Images to be stored
                                       Reference referenceImageToUpload = referenceDirImages.child(uniqueImageName);
 
-                                      try
-                                      {
+                                      try {
                                         // Store The File
-                                        await referenceImageToUpload.putFile(File(RequestCubit.get(context).imagePath1!));
+                                        await referenceImageToUpload.putFile(File(image1!.path));
                                         machineImageUrl = await referenceImageToUpload.getDownloadURL();
-                                      }catch(error)
-                                      {
+                                        print('Machine Image : $machineImageUrl');
+                                      } catch (error) {
                                         // Some Errors
-                                      }
 
+                                      }
                                     },
-                                    child: (RequestCubit.get(context).imagePath1 !=
+                                    child: (image1?.path !=
                                         null)
                                         ? Image.file(
-                                        File(RequestCubit.get(context).imagePath1!))
+                                        File(image1!.path))
                                         : Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           14.0, 35.0, 8.0, 50.0),
@@ -191,8 +198,7 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
                                   ),
                                   defaultOutlineAddButton(
                                     onPressed: () async {
-                                      RequestCubit.get(context).pickImage(2);
-
+                                      image2 = await imagePicker.pickImage(source: ImageSource.camera);
                                       // Get Reference To Storage Root
                                       Reference referenceRoot = FirebaseStorage.instance.ref();
                                       Reference referenceDirImages = referenceRoot.child('images');
@@ -200,22 +206,20 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
                                       // Create Reference for the Images to be stored
                                       Reference referenceImageToUpload = referenceDirImages.child(uniqueImageName);
 
-                                      try
-                                      {
+                                      try {
                                         // Store The File
-                                        await referenceImageToUpload.putFile(File(RequestCubit.get(context).imagePath2!));
+                                        await referenceImageToUpload.putFile(File(image2!.path));
                                         machineTypeImageUrl = await referenceImageToUpload.getDownloadURL();
                                         print('Machine Type Image : $machineTypeImageUrl');
-                                      }catch(error)
-                                      {
-
+                                      } catch (error) {
                                         // Some Errors
+
                                       }
                                     },
-                                    child: (RequestCubit.get(context).imagePath2 !=
+                                    child: (image2?.path !=
                                         null)
                                         ? Image.file(
-                                        File(RequestCubit.get(context).imagePath2!))
+                                        File(image2!.path))
                                         : Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           14.0, 35.0, 8.0, 35.0),
@@ -229,7 +233,7 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
                                   ),
                                   defaultOutlineAddButton(
                                     onPressed: () async {
-                                      RequestCubit.get(context).pickImage(3);
+                                      image3 = await imagePicker.pickImage(source: ImageSource.camera);
                                       // Get Reference To Storage Root
                                       Reference referenceRoot = FirebaseStorage.instance.ref();
                                       Reference referenceDirImages = referenceRoot.child('images');
@@ -239,7 +243,7 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
 
                                       try {
                                         // Store The File
-                                        await referenceImageToUpload.putFile(File(RequestCubit.get(context).imagePath3!));
+                                        await referenceImageToUpload.putFile(File(image3!.path));
                                         damageImageUrl = await referenceImageToUpload.getDownloadURL();
                                         print('Damaged Machine Image : $damageImageUrl');
                                       } catch (error) {
@@ -247,16 +251,16 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
 
                                       }
                                     },
-                                    child: (RequestCubit.get(context).imagePath3 !=
+                                    child: (image3?.path !=
                                         null)
                                         ? Image.file(
-                                        File(RequestCubit.get(context).imagePath3!))
+                                        File(image3!.path))
                                         : Padding(
                                       padding: const EdgeInsets.fromLTRB(
-                                          14.0, 35.0, 8.0, 50.0),
+                                          14.0, 35.0, 8.0, 35.0),
                                       child: Column(
                                         children: const [
-                                          Text('Damage Photo'),
+                                          Text('Machine Type Photo'),
                                           Icon(Icons.add,color: Colors.grey,),
                                         ],
                                       ),

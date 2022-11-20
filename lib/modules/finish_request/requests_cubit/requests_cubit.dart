@@ -397,25 +397,6 @@ class RequestCubit extends Cubit<RequestStates>
           emit(PickImageSuccessState());
           break;
       }
-
-     /* // Get Reference To Storage Root
-      Reference referenceRoot = FirebaseStorage.instance.ref();
-      Reference referenceDirImages = referenceRoot.child('images');
-
-      // Create Reference for the Images to be stored
-      Reference referenceImageToUpload = referenceDirImages.child(uniqueImageName);
-
-      try {
-        // Store The File
-        await referenceImageToUpload.putFile(File(imagePath!));
-        imageUrl = await referenceImageToUpload.getDownloadURL();
-
-
-      } catch (error) {
-        // Some Errors
-
-      }*/
-      //emit(PickImageSuccessState());
     }
   }
 

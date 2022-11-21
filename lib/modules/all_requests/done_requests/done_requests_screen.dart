@@ -18,7 +18,7 @@ class DoneRequestsScreen extends StatelessWidget {
         title: const Text('Done Requests'),
       ),
       body: FutureBuilder(
-        future: cubit.getDoneDocId(city: city),
+        future: cubit.getDoneDocId(city: city!),
         builder: (context, snapshot) {
           return ListView.separated(
             physics: const BouncingScrollPhysics(),
@@ -32,12 +32,12 @@ class DoneRequestsScreen extends StatelessWidget {
                     DoneArchivedDetailsScreen(
                       id: cubit.doneDocIDs[index],
                       collection: 'doneRequests',
-                      city: city,
+                      city: city!,
                       currentIndex: index,
                     ));
               },
               title: GetDoneArchivedData(
-                city: city,
+                city: city!,
                 collection: 'doneRequests',
                 documentId: cubit.doneDocIDs[index],
                 documentDataKey: 'companyName',

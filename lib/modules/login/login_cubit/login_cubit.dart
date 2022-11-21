@@ -16,6 +16,7 @@ class LoginCubit extends Cubit<LoginStates>
   void userLogin (
   {
     required String email,
+    required String city,
     required String password,
 })
   {
@@ -23,7 +24,7 @@ class LoginCubit extends Cubit<LoginStates>
 
     FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value)
     {
-      emit(LoginSuccessState(value.user!.uid, city, technicalPhone));
+      emit(LoginSuccessState(value.user!.uid, city, technicalPhone!));
     }).catchError((error)
     {
       emit(LoginErrorState(error.toString()));
@@ -49,7 +50,7 @@ class LoginCubit extends Cubit<LoginStates>
 
     await FirebaseAuth.instance.signInWithCredential(credential).then((value)
     {
-      emit(LoginSuccessState(value.user!.uid, city, technicalPhone));
+      emit(LoginSuccessState(value.user!.uid, city!, technicalPhone!));
       //emit(LoginWithGoogleSuccessState());
     }).catchError((error)
     {

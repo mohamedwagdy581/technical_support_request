@@ -11,12 +11,31 @@ import 'login_cubit/login_cubit.dart';
 import 'login_cubit/login_states.dart';
 
 // ignore: must_be_immutable
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   late var formKey = GlobalKey<FormState>();
+
   var emailController = TextEditingController();
+
   var passwordController = TextEditingController();
+
+  int _areaValue = 0;
+
+  String _area = '';
+
+  var areas = <String>[
+    'إختر المنطقة؟',
+    'أبوعريش',
+    'جازان',
+    'أحدالمسارحة',
+    'العارضة',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +126,10 @@ class LoginScreen extends StatelessWidget {
                             {
                               return 'Please enter your email address';
                             }
+                            if(!RegExp("^[a-zA-Z0-9_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value))
+                            {
+                              return 'Please Enter a Valid Email';
+                            }
                             return null;
                           },
                           prefix: Icons.email_outlined,
@@ -117,6 +140,43 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(
                           height: height * 0.02,
                         ),
+
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: Colors.grey[300],
+                          ),
+                          child: ListTile(
+                            title: const Text(
+                              'Select Your Area',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                              ),
+                            ),
+                            trailing: DropdownButton<String>(
+                              hint: const Text('Area',textAlign: TextAlign.end,),
+                              value: areas[_areaValue],
+                              items: areas.map((String areaValue) {
+                                return DropdownMenuItem<String>(
+                                  value: areaValue,
+                                  child: Text(areaValue),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _areaValue = areas.indexOf(value!);
+                                  _area = value.toString();
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+
+                        //SizedBox between Email and Password TextFormField
+                        SizedBox(
+                          height: height * 0.02,
+                        ),
+
 
                         // TextFormField of Password
                         defaultTextFormField(
@@ -161,6 +221,7 @@ class LoginScreen extends StatelessWidget {
                                     {
                                       LoginCubit.get(context).userLogin(
                                         email: emailController.text.trim(),
+                                        city: _area,
                                         password: passwordController.text.trim(),
                                       );
                                     }

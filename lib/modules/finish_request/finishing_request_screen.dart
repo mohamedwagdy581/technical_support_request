@@ -95,7 +95,7 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
         listener: (context, state) {},
         builder: (context, state) {
           final Stream<QuerySnapshot> dataStream = FirebaseFirestore.instance
-              .collection(city)
+              .collection(city!)
               .doc(city)
               .collection('technicals')
               .snapshots();

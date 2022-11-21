@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:technical_requests/modules/all_requests/archived_requests/archived_requests_screen.dart';
 import 'package:technical_requests/modules/all_requests/done_requests/done_requests_screen.dart';
+import 'package:technical_requests/modules/profile/profile_screen.dart';
 import 'package:technical_requests/modules/settings_screen/settings_screen.dart';
 
 import '../modules/about_us/about_us_screen.dart';
@@ -23,6 +25,36 @@ class HomeLayout extends StatefulWidget {
 
 class _HomeLayoutState extends State<HomeLayout> {
 
+  final userData = FirebaseAuth.instance.currentUser;
+  String name = '';
+  String email = '';
+  String image = '';
+
+  Future getUserData() async {
+    await FirebaseFirestore.instance
+        .collection(city!)
+        .doc(city)
+        .collection('technicals')
+        .doc(userData!.uid)
+        .get()
+        .then((snapshot) async {
+      if (snapshot.exists) {
+        setState(() {
+          name = snapshot.data()!['name'];
+          email = snapshot.data()!['email'];
+          image = snapshot.data()!['image'];
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
     var cubit = AppCubit.get(context);
@@ -32,9 +64,6 @@ class _HomeLayoutState extends State<HomeLayout> {
     uId = CashHelper.getData(key: 'uId');
     city = CashHelper.getData(key: 'city');
     technicalPhone = CashHelper.getData(key: 'technicalPhone');
-    /*city = CashHelper.getData(key: 'city');
-    technicalPhone = CashHelper.getData(key: 'technicalPhone');*/
-
 
     return Scaffold(
       appBar: AppBar(
@@ -48,9 +77,9 @@ class _HomeLayoutState extends State<HomeLayout> {
             // Header
             UserAccountsDrawerHeader(
               accountName:
-              uId != null ?  Text('${user?.displayName}') : const Text(''),
+              uId != null ?  Text('Name: $name') : const Text(''),
               accountEmail:
-              uId != null ?  Text('${user?.email}') : Container(
+              uId != null ?  Text('Email: $email') : Container(
                 width: width * 0.5,
                 padding: const EdgeInsets.only(bottom: 15,left: 5,right: 60),
                 child: defaultButton(
@@ -62,15 +91,15 @@ class _HomeLayoutState extends State<HomeLayout> {
                   backgroundColor: Colors.deepOrange,
                 ),
               ),
-              currentAccountPicture: Image.network('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),
-
-              /*cubit.profileImageUrl == ''
-                      ? Image.network('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png')
-                      : CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      cubit.profileImageUrl,
-                    ),
-                  ),*/
+              currentAccountPicture: image == ''
+                  ? Image.network(
+                'https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png',
+              )
+                  : CircleAvatar(
+                backgroundImage: NetworkImage(
+                  image,
+                ),
+              ),
               decoration: const BoxDecoration(
                 color: Colors.blue,
               ),
@@ -127,6 +156,25 @@ class _HomeLayoutState extends State<HomeLayout> {
                 ),
                 leading: Icon(
                   Icons.archive_outlined,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: height * 0.03,
+            ),
+
+            InkWell(
+              onTap: () {
+                navigateAndFinish(context, const ProfileScreen());
+              },
+              child: const ListTile(
+                title: Text(
+                  'Profile Screen',
+                ),
+                leading: Icon(
+                  Icons.person_pin_rounded,
                   color: Colors.red,
                 ),
               ),
@@ -212,15 +260,15 @@ class _HomeLayoutState extends State<HomeLayout> {
                     navigateTo(
                         context,
                         RequestDetails(
-                          technicalPhone: technicalPhone,
-                          city: city,
+                          technicalPhone: technicalPhone!,
+                          city: city!,
                           currentIndex: index,
                           id: cubit.docIDs[index],
                         ));
                     //print(cubit.docIDs[index]);
                   },
                   title: GetRequestsData(
-                    city: city,
+                    city: city!,
                     collection: 'requests',
                     documentId: cubit.docIDs[index],
                     documentDataKey: 'companyName',

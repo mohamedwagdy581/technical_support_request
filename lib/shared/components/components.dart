@@ -28,7 +28,7 @@ Widget defaultTextFormField({
   required String? Function(String?)? validator,
   Function(String)? onSubmitted,
   bool secure = false,
-  required IconData? prefix,
+  IconData? prefix,
   Color? prefixColor,
   IconData? suffix,
   Color? suffixColor,

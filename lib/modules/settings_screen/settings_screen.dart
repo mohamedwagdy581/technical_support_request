@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:technical_requests/home_layout/home_layout.dart';
 import 'package:technical_requests/modules/history/history_screen.dart';
+import 'package:technical_requests/modules/profile/profile_screen.dart';
 
 
 import '../../shared/components/components.dart';
@@ -43,10 +44,26 @@ class SettingsScreen extends StatelessWidget {
               {
                 navigateTo(context, const AboutUsScreen());
               },
-              prefixIcon: Icons.person,
+              prefixIcon: Icons.info_outline,
               suffixIcon: FontAwesomeIcons.arrowRight,
               title: 'About us',
               subTitle: 'contact with us to solve your problem',
+            ),
+
+            SizedBox(
+              height: height * 0.033,
+            ),
+
+            customListTile(
+              context: context,
+              onTap: ()
+              {
+                navigateTo(context, const ProfileScreen());
+              },
+              prefixIcon: Icons.person,
+              suffixIcon: FontAwesomeIcons.arrowRight,
+              title: 'Profile Screen',
+              subTitle: 'Edit your profile image and cover and password',
             ),
 
             SizedBox(

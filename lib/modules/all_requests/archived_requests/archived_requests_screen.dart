@@ -20,7 +20,7 @@ class ArchivedRequestsScreen extends StatelessWidget {
         title: const Text('Archived Requests'),
       ),
       body: FutureBuilder(
-        future: cubit.getArchivedDocId(city: city),
+        future: cubit.getArchivedDocId(city: city!),
         builder: (context, snapshot) {
           return ListView.separated(
             physics: const BouncingScrollPhysics(),
@@ -34,7 +34,7 @@ class ArchivedRequestsScreen extends StatelessWidget {
                     DoneArchivedDetailsScreen(
                       id: cubit.archivedDocIDs[index],
                       collection: 'archivedRequests',
-                      city: city,
+                      city: city!,
                       currentIndex: index,
                     ),
                 );
@@ -43,7 +43,7 @@ class ArchivedRequestsScreen extends StatelessWidget {
               title: Container(
                 alignment: AlignmentDirectional.center,
                 child: GetDoneArchivedData(
-                  city: city,
+                  city: city!,
                   collection: 'archivedRequests',
                   documentId: cubit.archivedDocIDs[index],
                   documentDataKey: 'companyName',

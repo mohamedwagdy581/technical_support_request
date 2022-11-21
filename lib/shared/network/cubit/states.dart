@@ -54,6 +54,16 @@ class AppGetArchivedDocIDsErrorState extends AppStates
   AppGetArchivedDocIDsErrorState(this.error);
 }
 
+// Profile Image Picked States
+class AppProfileImagePickedSuccessState extends AppStates {}
+
+class AppProfileImagePickedErrorState extends AppStates {}
+
+// Cover Image Picked States
+class AppCoverImagePickedSuccessState extends AppStates {}
+
+class AppCoverImagePickedErrorState extends AppStates {}
+
 
 // Change Mode Theme of App
 class AppChangeModeThemeState extends AppStates {}

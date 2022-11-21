@@ -13,11 +13,12 @@ void signOut(context) {
 }
 
 String? uId;
-var city = 'a';
-var technicalPhone = 'a';
+String? city = 'جازان';
+String? technicalPhone = 'a';
 /*String city = CashHelper.getData(key: 'city');
 String technicalPhone = CashHelper.getData(key: 'technicalPhone');*/
 String profileImage = '';
+String coverImage = '';
 
 // void printFullText(String text) {
 //   final pattern = RegExp('.{1,800}');

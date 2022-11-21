@@ -181,26 +181,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
 
-                        // TextFormField of Name
-                        /*defaultTextFormField(
-                          controller: areaController,
-                          keyboardType: TextInputType.name,
-                          label: 'Area',
-                          textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(
-                            color:
-                            AppCubit.get(context).isDark ? Colors.black : Colors.white,
-                          ),
-                          validator: (String? value) {
-                            if(value!.isEmpty)
-                            {
-                              return 'Please enter your Area';
-                            }
-                            return null;
-                          },
-                          prefix: Icons.area_chart_outlined,
-                          prefixColor: AppCubit.get(context).isDark ? Colors.black : Colors.white,
-                        ),*/
-
                         //SizedBox between Name and Email Address TextFormField
                         SizedBox(
                           height: height * 0.019,
@@ -219,6 +199,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             if(value!.isEmpty)
                             {
                               return 'Please enter your email address';
+                            }
+                            if(!RegExp("^[a-zA-Z0-9_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value))
+                            {
+                              return 'Please Enter a Valid Email';
                             }
                             return null;
                           },

@@ -1,6 +1,12 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:technical_requests/shared/components/fUser.dart';
 
 import '../../../models/user_model.dart';
@@ -19,7 +25,7 @@ class AppCubit extends Cubit<AppStates> {
   void getUserData() {
     emit(AppGetUserLoadingState());
 
-    FirebaseFirestore.instance.collection(city).doc(city).collection('users').doc(uId).get().then((value) {
+    FirebaseFirestore.instance.collection(city!).doc(city).collection('users').doc(uId).get().then((value) {
       userModel = UserModel.fromJson(value.data()!);
       emit(AppGetUserSuccessState());
     }).catchError((error) {
@@ -37,7 +43,7 @@ class AppCubit extends Cubit<AppStates> {
   {
     emit(AppGetDocIDsLoadingState());
     docIDs.clear();
-    await FirebaseFirestore.instance.collection(city).doc(city).collection('requests').get().then((snapshot)
+    await FirebaseFirestore.instance.collection(city!).doc(city).collection('requests').get().then((snapshot)
     {
       for (var document in snapshot.docs) {
         docIDs.add(document.reference.id);
@@ -88,6 +94,65 @@ class AppCubit extends Cubit<AppStates> {
     {
       emit(AppGetArchivedDocIDsErrorState(error));
     });
+  }
+
+  String profileImageUrl = '';
+  void pickUploadProfileImage() async
+  {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 512,
+      maxHeight: 512,
+      imageQuality: 75,
+    );
+    final imagePermanent = await saveImagePermanently(image!.path);
+    Reference reference = FirebaseStorage.instance.ref().child('profilepic.jpg');
+    await reference.putFile(File(image.path));
+    reference.getDownloadURL().then((value)
+    {
+      profileImageUrl = value;
+      CashHelper.saveData(key: profileImage, value: imagePermanent.path);
+      print(value);
+      emit(AppProfileImagePickedSuccessState());
+    }).catchError((error)
+    {
+      print(error.toString());
+      emit(AppProfileImagePickedErrorState());
+    });
+
+  }
+  // To Store Image in Directory Path
+  Future<File> saveImagePermanently(String imagePath) async
+  {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = basename(imagePath);
+    final image = File('${directory.path}/$name');
+    return File(imagePath).copy(image.path);
+  }
+
+  // Cover Picked image
+  String coverImageUrl = '';
+  void pickUploadCoverImage() async
+  {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 512,
+      maxHeight: 512,
+      imageQuality: 75,
+    );
+    Reference reference = FirebaseStorage.instance.ref().child('coverpic.jpg');
+    await reference.putFile(File(image!.path));
+    reference.getDownloadURL().then((value)
+    {
+      coverImageUrl = value;
+      print(value);
+      emit(AppCoverImagePickedSuccessState());
+    }).catchError((error)
+    {
+      print(error.toString());
+      emit(AppCoverImagePickedErrorState());
+    });
+
   }
 
 

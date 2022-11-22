@@ -343,7 +343,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: defaultButton(
                                     onPressed: () async {
                                       await openDialog();
-                                      //navigateAndFinish(context, const ResetPasswordScreen());
                                     },
                                     text: 'Update',
                                   ),
@@ -443,7 +442,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             defaultTextButton(
               onPressed: () {
                 passwordReset();
-                //Navigator.of(context).pop(passwordController.text);
+                emailController.clear();
+                navigateAndFinish(context, const HomeLayout());
               },
               text: 'Send',
             ),
@@ -472,6 +472,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             );
           });
     }
-    navigateAndFinish(context, const ProfileScreen());
+
   }
 }

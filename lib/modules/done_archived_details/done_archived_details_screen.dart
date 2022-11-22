@@ -147,25 +147,22 @@ class _RequestDetailsState extends State<DoneArchivedDetailsScreen> {
                           TableRow(
                             children: [
                               customTableKeyCell(text: 'Machine Image', context: context),
-                              customTableValueCell(
-                                text: storeDocs[widget.currentIndex]['machineImage'],
-                              ),
+                              Image.network('${storeDocs[widget.currentIndex]
+                              ['machineImage']}'),
                             ],
                           ),
                           TableRow(
                             children: [
                               customTableKeyCell(text: 'Machine Type Image', context: context),
-                              customTableValueCell(
-                                text: storeDocs[widget.currentIndex]['machineTypeImage'],
-                              ),
+                              Image.network('${storeDocs[widget.currentIndex]
+                              ['machineTypeImage']}'),
                             ],
                           ),
                           TableRow(
                             children: [
                               customTableKeyCell(text: 'Damage Image', context: context),
-                              customTableValueCell(
-                                text: storeDocs[widget.currentIndex]['damageImage'],
-                              ),
+                              Image.network('${storeDocs[widget.currentIndex]
+                              ['damageImage']}'),
                             ],
                           ),
 

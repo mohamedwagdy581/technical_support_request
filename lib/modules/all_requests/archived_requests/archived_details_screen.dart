@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:technical_requests/modules/finish_request/finishing_request_screen.dart';
+import 'package:technical_requests/shared/components/constants.dart';
 import 'package:technical_requests/shared/components/fUser.dart';
 
-import '../../../home_layout/home_layout.dart';
 import '../../../models/locationServices.dart';
 import '../../../shared/components/components.dart';
 import '../../finish_request/requests_cubit/requests_cubit.dart';
@@ -65,7 +66,7 @@ class _RequestDetailsState extends State<ArchivedDetailsScreen> {
                     itemBuilder: (context, index) {
                       var latitude = storeDocs[widget.currentIndex]['latitude'];
                       var longitude =
-                      storeDocs[widget.currentIndex]['longitude'];
+                          storeDocs[widget.currentIndex]['longitude'];
                       return Column(
                         children: [
                           SizedBox(
@@ -95,7 +96,7 @@ class _RequestDetailsState extends State<ArchivedDetailsScreen> {
                                         text: 'Company Name', context: context),
                                     customTableValueCell(
                                       text: storeDocs[widget.currentIndex]
-                                      ['companyName'],
+                                          ['companyName'],
                                     ),
                                   ],
                                 ),
@@ -105,7 +106,7 @@ class _RequestDetailsState extends State<ArchivedDetailsScreen> {
                                         text: 'City', context: context),
                                     customTableValueCell(
                                       text: storeDocs[widget.currentIndex]
-                                      ['city'],
+                                          ['city'],
                                     ),
                                   ],
                                 ),
@@ -115,7 +116,7 @@ class _RequestDetailsState extends State<ArchivedDetailsScreen> {
                                         text: 'School', context: context),
                                     customTableValueCell(
                                       text: storeDocs[widget.currentIndex]
-                                      ['school'],
+                                          ['school'],
                                     ),
                                   ],
                                 ),
@@ -126,7 +127,7 @@ class _RequestDetailsState extends State<ArchivedDetailsScreen> {
                                         context: context),
                                     customTableValueCell(
                                       text: storeDocs[widget.currentIndex]
-                                      ['customerPhone'],
+                                          ['customerPhone'],
                                     ),
                                   ],
                                 ),
@@ -137,7 +138,7 @@ class _RequestDetailsState extends State<ArchivedDetailsScreen> {
                                         context: context),
                                     customTableValueCell(
                                       text: storeDocs[widget.currentIndex]
-                                      ['technicalName'],
+                                          ['technicalName'],
                                     ),
                                   ],
                                 ),
@@ -148,7 +149,7 @@ class _RequestDetailsState extends State<ArchivedDetailsScreen> {
                                         context: context),
                                     customTableValueCell(
                                       text: storeDocs[widget.currentIndex]
-                                      ['technicalPhone'],
+                                          ['technicalPhone'],
                                     ),
                                   ],
                                 ),
@@ -209,7 +210,7 @@ class _RequestDetailsState extends State<ArchivedDetailsScreen> {
                                         text: 'Consultation', context: context),
                                     customTableValueCell(
                                       text: storeDocs[widget.currentIndex]
-                                      ['consultation'],
+                                          ['consultation'],
                                     ),
                                   ],
                                 ),
@@ -221,75 +222,22 @@ class _RequestDetailsState extends State<ArchivedDetailsScreen> {
                           ),
                           customButton(
                             onPressed: () {
-                              final companyName =
-                              storeDocs[widget.currentIndex]['companyName'];
-                              final city =
-                              storeDocs[widget.currentIndex]['city'];
-                              final customerPhone =
-                              storeDocs[widget.currentIndex]
-                              ['customerPhone'];
-                              final technicalPhone =
-                              storeDocs[widget.currentIndex]
-                              ['technicalPhone'];
-                              final school =
-                              storeDocs[widget.currentIndex]['school'];
-                              final machineImage =
-                              storeDocs[widget.currentIndex]
-                              ['machineImage'];
-                              final machineTypeImage =
-                              storeDocs[widget.currentIndex]
-                              ['machineTypeImage'];
-                              final damageImage =
-                              storeDocs[widget.currentIndex]['damageImage'];
-                              final consultation =
-                              storeDocs[widget.currentIndex]
-                              ['consultation'];
-                              _showDoneAndArchivedDialog(
-                                context: context,
-                                doneOnPressed: () {
-                                  RequestCubit.get(context)
-                                      .technicalDoneRequest(
-                                    city: city.toString(),
-                                    companyName: companyName.toString(),
-                                    school: school.toString(),
-                                    customerPhone: customerPhone,
-                                    technicalPhone: technicalPhone,
-                                    machineImage: machineImage,
-                                    machineTypeImage: machineTypeImage,
-                                    damageImage: damageImage,
-                                    consultation: consultation.toString(),
-                                    longitude: longitude,
-                                    latitude: latitude,
-                                  );
-
-                                  RequestCubit.get(context)
-                                      .technicalDoneHistoryRequest(
-                                    city: city.toString(),
-                                    companyName: companyName.toString(),
-                                    school: school.toString(),
-                                    technicalPhone: technicalPhone.toString(),
-                                    customerPhone: customerPhone.toString(),
-                                    machineImage: machineImage,
-                                    machineTypeImage: machineTypeImage,
-                                    damageImage: damageImage,
-                                    consultation: consultation.toString(),
-                                    longitude: longitude,
-                                    latitude: latitude,
-                                  );
-                                  FirebaseFirestore.instance
-                                      .collection(widget.city)
-                                      .doc(widget.city)
-                                      .collection('requests')
-                                      .doc(widget.id)
-                                      .delete();
-
-                                  showToast(
-                                    message: 'Request Done Successfully',
-                                    state: ToastStates.SUCCESS,
-                                  );
-                                  navigateAndFinish(
-                                      context, const HomeLayout());
-                                },
+                              navigateAndFinish(
+                                context,
+                                FinishingRequestScreen(
+                                  id: widget.id,
+                                  companyName: storeDocs[widget.currentIndex]
+                                  ['companyName'],
+                                  city: storeDocs[widget.currentIndex]
+                                  ['city'],
+                                  school: storeDocs[widget.currentIndex]
+                                  ['school'],
+                                  customerPhone: storeDocs[widget.currentIndex]
+                                  ['customerPhone'],
+                                  machine: storeDocs[widget.currentIndex]
+                                  ['machineImage'],
+                                  technicalPhone: technicalPhone!,
+                                ),
                               );
                             },
                             text: 'Finish',
@@ -324,9 +272,9 @@ class _RequestDetailsState extends State<ArchivedDetailsScreen> {
         child: Text(
           text,
           style: Theme.of(context).textTheme.bodyText1?.copyWith(
-            fontSize: 20.0,
-            fontWeight: FontWeight.normal,
-          ),
+                fontSize: 20.0,
+                fontWeight: FontWeight.normal,
+              ),
         ),
       );
 
@@ -375,25 +323,4 @@ class _RequestDetailsState extends State<ArchivedDetailsScreen> {
           ),
         ),
       );
-
-  Future<bool> _showDoneAndArchivedDialog({
-    context,
-    required VoidCallback doneOnPressed,
-  }) async {
-    return await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Finishing Request'),
-        content: const Text(
-            'If Request is Done!, Enter the Done Button, if not Enter the Archive Button.'),
-        actions: [
-          customButton(
-            onPressed: doneOnPressed,
-            text: 'Done',
-            backgroundColor: Colors.green,
-          ),
-        ],
-      ),
-    );
-  }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:technical_requests/modules/all_requests/done_requests/done_details_screen.dart';
 import 'package:technical_requests/modules/all_requests/get_done_archived_data.dart';
 
 import '../../../home_layout/home_layout.dart';
 import '../../../shared/components/components.dart';
 import '../../../shared/components/constants.dart';
 import '../../../shared/network/cubit/cubit.dart';
-import '../../done_archived_details/done_archived_details_screen.dart';
 
 class DoneRequestsScreen extends StatelessWidget {
   const DoneRequestsScreen({Key? key,}) : super(key: key);
@@ -29,9 +29,8 @@ class DoneRequestsScreen extends StatelessWidget {
               onTapped: () {
                 navigateTo(
                     context,
-                    DoneArchivedDetailsScreen(
+                    DoneDetailsScreen(
                       id: cubit.doneDocIDs[index],
-                      collection: 'doneRequests',
                       city: city!,
                       currentIndex: index,
                     ));

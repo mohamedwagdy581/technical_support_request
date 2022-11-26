@@ -3,31 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:technical_requests/shared/components/fUser.dart';
 
+import '../../../home_layout/home_layout.dart';
 import '../../../models/locationServices.dart';
 import '../../../shared/components/components.dart';
-import '../../home_layout/home_layout.dart';
-import '../finish_request/requests_cubit/requests_cubit.dart';
-import '../finish_request/requests_cubit/requests_states.dart';
+import '../../finish_request/requests_cubit/requests_cubit.dart';
+import '../../finish_request/requests_cubit/requests_states.dart';
 
-class DoneArchivedDetailsScreen extends StatefulWidget {
+class ArchivedDetailsScreen extends StatefulWidget {
   final String id;
-  final String collection;
   final int currentIndex;
   final String city;
 
-  const DoneArchivedDetailsScreen({
+  const ArchivedDetailsScreen({
     super.key,
     required this.currentIndex,
     required this.city,
     required this.id,
-    required this.collection,
   });
 
   @override
-  State<DoneArchivedDetailsScreen> createState() => _RequestDetailsState();
+  State<ArchivedDetailsScreen> createState() => _RequestDetailsState();
 }
 
-class _RequestDetailsState extends State<DoneArchivedDetailsScreen> {
+class _RequestDetailsState extends State<ArchivedDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -36,7 +34,7 @@ class _RequestDetailsState extends State<DoneArchivedDetailsScreen> {
         .doc(widget.city)
         .collection('technicals')
         .doc(userUID)
-        .collection(widget.collection)
+        .collection('archivedRequests')
         .snapshots();
 
     return BlocProvider(
@@ -67,7 +65,7 @@ class _RequestDetailsState extends State<DoneArchivedDetailsScreen> {
                     itemBuilder: (context, index) {
                       var latitude = storeDocs[widget.currentIndex]['latitude'];
                       var longitude =
-                          storeDocs[widget.currentIndex]['longitude'];
+                      storeDocs[widget.currentIndex]['longitude'];
                       return Column(
                         children: [
                           SizedBox(
@@ -97,7 +95,7 @@ class _RequestDetailsState extends State<DoneArchivedDetailsScreen> {
                                         text: 'Company Name', context: context),
                                     customTableValueCell(
                                       text: storeDocs[widget.currentIndex]
-                                          ['companyName'],
+                                      ['companyName'],
                                     ),
                                   ],
                                 ),
@@ -107,7 +105,7 @@ class _RequestDetailsState extends State<DoneArchivedDetailsScreen> {
                                         text: 'City', context: context),
                                     customTableValueCell(
                                       text: storeDocs[widget.currentIndex]
-                                          ['city'],
+                                      ['city'],
                                     ),
                                   ],
                                 ),
@@ -117,7 +115,7 @@ class _RequestDetailsState extends State<DoneArchivedDetailsScreen> {
                                         text: 'School', context: context),
                                     customTableValueCell(
                                       text: storeDocs[widget.currentIndex]
-                                          ['school'],
+                                      ['school'],
                                     ),
                                   ],
                                 ),
@@ -128,7 +126,7 @@ class _RequestDetailsState extends State<DoneArchivedDetailsScreen> {
                                         context: context),
                                     customTableValueCell(
                                       text: storeDocs[widget.currentIndex]
-                                          ['customerPhone'],
+                                      ['customerPhone'],
                                     ),
                                   ],
                                 ),
@@ -139,7 +137,7 @@ class _RequestDetailsState extends State<DoneArchivedDetailsScreen> {
                                         context: context),
                                     customTableValueCell(
                                       text: storeDocs[widget.currentIndex]
-                                          ['technicalName'],
+                                      ['technicalName'],
                                     ),
                                   ],
                                 ),
@@ -150,7 +148,7 @@ class _RequestDetailsState extends State<DoneArchivedDetailsScreen> {
                                         context: context),
                                     customTableValueCell(
                                       text: storeDocs[widget.currentIndex]
-                                          ['technicalPhone'],
+                                      ['technicalPhone'],
                                     ),
                                   ],
                                 ),
@@ -211,7 +209,7 @@ class _RequestDetailsState extends State<DoneArchivedDetailsScreen> {
                                         text: 'Consultation', context: context),
                                     customTableValueCell(
                                       text: storeDocs[widget.currentIndex]
-                                          ['consultation'],
+                                      ['consultation'],
                                     ),
                                   ],
                                 ),
@@ -224,28 +222,28 @@ class _RequestDetailsState extends State<DoneArchivedDetailsScreen> {
                           customButton(
                             onPressed: () {
                               final companyName =
-                                  storeDocs[widget.currentIndex]['companyName'];
+                              storeDocs[widget.currentIndex]['companyName'];
                               final city =
-                                  storeDocs[widget.currentIndex]['city'];
+                              storeDocs[widget.currentIndex]['city'];
                               final customerPhone =
-                                  storeDocs[widget.currentIndex]
-                                      ['customerPhone'];
+                              storeDocs[widget.currentIndex]
+                              ['customerPhone'];
                               final technicalPhone =
-                                  storeDocs[widget.currentIndex]
-                                      ['technicalPhone'];
+                              storeDocs[widget.currentIndex]
+                              ['technicalPhone'];
                               final school =
-                                  storeDocs[widget.currentIndex]['school'];
+                              storeDocs[widget.currentIndex]['school'];
                               final machineImage =
-                                  storeDocs[widget.currentIndex]
-                                      ['machineImage'];
+                              storeDocs[widget.currentIndex]
+                              ['machineImage'];
                               final machineTypeImage =
-                                  storeDocs[widget.currentIndex]
-                                      ['machineTypeImage'];
+                              storeDocs[widget.currentIndex]
+                              ['machineTypeImage'];
                               final damageImage =
-                                  storeDocs[widget.currentIndex]['damageImage'];
+                              storeDocs[widget.currentIndex]['damageImage'];
                               final consultation =
-                                  storeDocs[widget.currentIndex]
-                                      ['consultation'];
+                              storeDocs[widget.currentIndex]
+                              ['consultation'];
                               _showDoneAndArchivedDialog(
                                 context: context,
                                 doneOnPressed: () {
@@ -326,9 +324,9 @@ class _RequestDetailsState extends State<DoneArchivedDetailsScreen> {
         child: Text(
           text,
           style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                fontSize: 20.0,
-                fontWeight: FontWeight.normal,
-              ),
+            fontSize: 20.0,
+            fontWeight: FontWeight.normal,
+          ),
         ),
       );
 

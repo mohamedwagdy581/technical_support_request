@@ -41,8 +41,8 @@ class AppCubit extends Cubit<AppStates> {
 
   Future getDocId() async
   {
-    emit(AppGetDocIDsLoadingState());
     docIDs.clear();
+    emit(AppGetDocIDsLoadingState());
     await FirebaseFirestore.instance.collection(city!).doc(city).collection('requests').get().then((snapshot)
     {
       for (var document in snapshot.docs) {
@@ -61,7 +61,6 @@ class AppCubit extends Cubit<AppStates> {
 
   Future getDoneDocId({required String city}) async
   {
-    print(city);
     emit(AppGetDoneDocIDsLoadingState());
     doneDocIDs.clear();
     await FirebaseFirestore.instance.collection(city).doc(city).collection('technicals').doc(userUID).collection('doneRequests').get().then((
@@ -112,11 +111,15 @@ class AppCubit extends Cubit<AppStates> {
     {
       profileImageUrl = value;
       CashHelper.saveData(key: profileImage, value: imagePermanent.path);
-      print(value);
+      if (kDebugMode) {
+        print(value);
+      }
       emit(AppProfileImagePickedSuccessState());
     }).catchError((error)
     {
-      print(error.toString());
+      if (kDebugMode) {
+        print(error.toString());
+      }
       emit(AppProfileImagePickedErrorState());
     });
 
@@ -145,11 +148,15 @@ class AppCubit extends Cubit<AppStates> {
     reference.getDownloadURL().then((value)
     {
       coverImageUrl = value;
-      print(value);
+      if (kDebugMode) {
+        print(value);
+      }
       emit(AppCoverImagePickedSuccessState());
     }).catchError((error)
     {
-      print(error.toString());
+      if (kDebugMode) {
+        print(error.toString());
+      }
       emit(AppCoverImagePickedErrorState());
     });
 

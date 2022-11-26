@@ -58,7 +58,6 @@ class _HomeLayoutState extends State<HomeLayout> {
   @override
   Widget build(BuildContext context) {
     var cubit = AppCubit.get(context);
-    var user = FirebaseAuth.instance.currentUser;
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     uId = CashHelper.getData(key: 'uId');
@@ -255,7 +254,6 @@ class _HomeLayoutState extends State<HomeLayout> {
                 ),
                 itemBuilder: (context, index) => customListTile(
                   onTapped: () {
-                    print(technicalPhone);
                     //navigateTo(context, DetailsScreen(index: index,id: cubit.docIDs[index],));
                     navigateTo(
                         context,

@@ -67,8 +67,7 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
 
   void getCurrentLocation() async
   {
-    LocationPermission permission;
-    permission = await Geolocator.requestPermission();
+    LocationPermission permission = await Geolocator.requestPermission();
 
     var position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -210,7 +209,7 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
                                         // Store The File
                                         await referenceImageToUpload.putFile(File(image2!.path));
                                         machineTypeImageUrl = await referenceImageToUpload.getDownloadURL();
-                                        print('Machine Type Image : $machineTypeImageUrl');
+                                        print('Damage Photo : $machineTypeImageUrl');
                                       } catch (error) {
                                         // Some Errors
 
@@ -225,7 +224,7 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
                                           14.0, 35.0, 8.0, 35.0),
                                       child: Column(
                                         children: const [
-                                          Text('Machine Type Photo'),
+                                          Text('Damage Photo'),
                                           Icon(Icons.add,color: Colors.grey,),
                                         ],
                                       ),
@@ -245,7 +244,7 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
                                         // Store The File
                                         await referenceImageToUpload.putFile(File(image3!.path));
                                         damageImageUrl = await referenceImageToUpload.getDownloadURL();
-                                        print('Damaged Machine Image : $damageImageUrl');
+                                        print('Fixed Damage : $damageImageUrl');
                                       } catch (error) {
                                         // Some Errors
 
@@ -260,7 +259,7 @@ class _FinishingRequestScreenState extends State<FinishingRequestScreen> {
                                           14.0, 35.0, 8.0, 35.0),
                                       child: Column(
                                         children: const [
-                                          Text('Machine Type Photo'),
+                                          Text('Fixed Photo'),
                                           Icon(Icons.add,color: Colors.grey,),
                                         ],
                                       ),
